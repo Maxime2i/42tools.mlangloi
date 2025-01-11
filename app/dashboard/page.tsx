@@ -59,6 +59,12 @@ export default function DashboardPage() {
         <h2 className="text-xl mb-4">Informations utilisateur</h2>
         <p>Login: {userInfo.login}</p>
         <p>Email: {userInfo.email}</p>
+        <button 
+          onClick={() => router.push('/rncp')}
+          className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Titre RNCP
+        </button>
       </div>
     </div>
   )

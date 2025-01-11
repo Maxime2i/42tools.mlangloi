@@ -33,6 +33,9 @@ export default function CallbackPage() {
           
           if (data.access_token) {
             localStorage.setItem('accessToken', data.access_token)
+            if (data.refresh_token) {
+              localStorage.setItem('refreshToken', data.refresh_token)
+            }
             router.push('/dashboard')
           } else {
             throw new Error('Token non reçu dans la réponse')
