@@ -284,18 +284,21 @@ export default function RNCPPage() {
 
   useEffect(() => {
     const initializeUserData = async () => {
-      if (!localStorage.getItem('accessToken')) {
+      const accessToken = localStorage.getItem('accessToken')
+      const isGuestMode = localStorage.getItem('guestMode')
+
+      if (!accessToken && !isGuestMode) {
         router.push('/')
         return
       }
 
-      try {
-        if (!userInfo) {
+      if (!isGuestMode && !userInfo) {
+        try {
           await fetchUserInfo()
+        } catch (error) {
+          console.error('Erreur:', error)
+          router.push('/')
         }
-      } catch (error) {
-        console.error('Erreur:', error)
-        router.push('/')
       }
     }
 
@@ -887,14 +890,14 @@ export default function RNCPPage() {
       </div>
 
       {/* Options */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:flex xl:flex-row gap-4">
-        {Object.entries(titles).flatMap(([titleId, title]) =>
-          Object.entries(title.options).map(([optionId, option]) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          {Object.entries(titles.rncp6.options).map(([optionId, option]) => (
             <Button
-              key={`${titleId}-${optionId}`}
+              key={`rncp6-${optionId}`}
               onClick={() => setActiveOption(optionId)}
               variant={activeOption === optionId ? "secondary" : "default"}
-              className={`w-full xl:flex-1 ${
+              className={`flex-1 ${
                 activeOption === optionId 
                   ? "bg-white text-black hover:bg-gray-200" 
                   : "bg-transparent text-white border border-white/10 hover:bg-white/10"
@@ -902,8 +905,71 @@ export default function RNCPPage() {
             >
               {option.name}
             </Button>
-          ))
-        )}
+          ))}
+        </div>
+        <div className="flex flex-col sm:flex-row gap-4">
+          {Object.entries(titles.rncp7.options).map(([optionId, option]) => (
+            <Button
+              key={`rncp7-${optionId}`}
+              onClick={() => setActiveOption(optionId)}
+              variant={activeOption === optionId ? "secondary" : "default"}
+              className={`flex-1 ${
+                activeOption === optionId 
+                  ? "bg-white text-black hover:bg-gray-200" 
+                  : "bg-transparent text-white border border-white/10 hover:bg-white/10"
+              }`}
+            >
+              {option.name}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      {/* Section de progression */}
+      <div className="grid grid-cols-2 gap-4">
+        <Card className="border-white/10 bg-zinc-800/50">
+          <CardContent className="pt-6">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Level minimum</span>
+              <Badge variant={userLevel >= (activeData.titleId === 'rncp6' ? 17 : 21) ? "success" : "destructive"}>
+                {userLevel.toFixed(2)} / {activeData.titleId === 'rncp6' ? '17' : '21'}
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-white/10 bg-zinc-800/50">
+          <CardContent className="pt-6">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Projets de groupe</span>
+              <Badge variant={groupProjects >= 2 ? "success" : "destructive"}>
+                {groupProjects} / 2
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-white/10 bg-zinc-800/50">
+          <CardContent className="pt-6">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Événements pédagogiques</span>
+              <Badge variant={pedagogicalEvents >= (activeData.titleId === 'rncp6' ? 10 : 15) ? "success" : "destructive"}>
+                {pedagogicalEvents} / {activeData.titleId === 'rncp6' ? '10' : '15'}
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-white/10 bg-zinc-800/50">
+          <CardContent className="pt-6">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Expériences professionnelles</span>
+              <Badge variant={professionalExperiences >= 2 ? "success" : "destructive"}>
+                {professionalExperiences} / 2
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Catégories de projets */}

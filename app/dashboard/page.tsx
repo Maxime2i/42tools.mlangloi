@@ -52,25 +52,32 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const initializeUserData = async () => {
-      if (!localStorage.getItem('accessToken')) {
+      const accessToken = localStorage.getItem('accessToken')
+      const isGuestMode = localStorage.getItem('guestMode')
+
+      if (!accessToken && !isGuestMode) {
         router.push('/')
         return
       }
 
-      try {
-        await fetchUserInfo()
-      } catch (error) {
-        router.push('/')
+      if (!isGuestMode && !userInfo) {
+        try {
+          await fetchUserInfo()
+        } catch (error) {
+          console.error('Erreur:', error)
+          router.push('/')
+        }
       }
     }
 
     initializeUserData()
-  }, [router, fetchUserInfo])
+  }, [router, fetchUserInfo, userInfo])
 
   const handleLogout = () => {
-    // Supprimer les tokens
+    // Supprimer les tokens et le mode invité
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    localStorage.removeItem('guestMode')
     // Réinitialiser le store
     useUserStore.getState().setUserInfo(null)
     // Rediriger vers la page de login
@@ -141,29 +148,40 @@ export default function DashboardPage() {
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-400">Niveau actuel</span>
-                <span className="text-white">{userInfo.cursus_users[userInfo.cursus_users.length - 1]?.level || 'Non spécifié'}</span>
+                <span className="text-white">
+                  {localStorage.getItem('guestMode') === 'true' 
+                    ? '0.00'
+                    : userInfo.cursus_users[userInfo.cursus_users.length - 1]?.level?.toFixed(2) || 'Non spécifié'
+                  }
+                </span>
               </div>
-              <Progress value={84} className="h-2 bg-white/10" />
+              <Progress value={localStorage.getItem('guestMode') === 'true' ? 0 : 84} className="h-2 bg-white/10" />
             </div>
 
             <div className="space-y-4">
               <h4 className="text-sm text-gray-400">Derniers projets</h4>
-              {userInfo.projects_users
-                ?.sort((a, b) => new Date(b.marked_at).getTime() - new Date(a.marked_at).getTime())
-                .slice(0, 3)
-                .map((project, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <span className="text-sm text-white">{project.project.name}</span>
-                    <Badge 
-                      variant="outline" 
-                      className={`border-white/20 ${
-                        project?.["validated?"] ? 'text-emerald-400' : 'text-red-400'
-                      }`}
-                    >
-                      {project.final_mark}/100
-                    </Badge>
-                  </div>
-                ))}
+              {localStorage.getItem('guestMode') === 'true' ? (
+                <div className="text-sm text-white">
+                  Aucun projet réalisé
+                </div>
+              ) : (
+                userInfo.projects_users
+                  ?.sort((a, b) => new Date(b.marked_at).getTime() - new Date(a.marked_at).getTime())
+                  .slice(0, 3)
+                  .map((project, i) => (
+                    <div key={i} className="flex items-center justify-between">
+                      <span className="text-sm text-white">{project.project.name}</span>
+                      <Badge 
+                        variant="outline" 
+                        className={`border-white/20 ${
+                          project?.["validated?"] ? 'text-emerald-400' : 'text-red-400'
+                        }`}
+                      >
+                        {project.final_mark}/100
+                      </Badge>
+                    </div>
+                  ))
+              )}
             </div>
           </CardContent>
         </Card>
@@ -177,8 +195,7 @@ export default function DashboardPage() {
           <CardContent>
             <div className="space-y-6">
               {userInfo.cursus_users[userInfo.cursus_users.length - 1]?.skills
-                ?.filter(skill => skill.level > 0)
-                .sort((a, b) => b.level - a.level)
+                ?.sort((a, b) => b.level - a.level)
                 .slice(0, 3)
                 .map((skill, i) => (
                 <div key={i} className="space-y-2">

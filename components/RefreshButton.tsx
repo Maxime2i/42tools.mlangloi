@@ -3,10 +3,12 @@
 import { useUserStore } from '@/store/userStore'
 import { RefreshCw } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export function RefreshButton() {
   const { canManualRefresh, manualRefresh } = useUserStore()
   const [timeLeft, setTimeLeft] = useState<number>(0)
+  const isGuestMode = typeof window !== 'undefined' && localStorage.getItem('guestMode') === 'true'
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -27,20 +29,34 @@ export function RefreshButton() {
   }, [canManualRefresh])
 
   const handleRefresh = async () => {
-    if (canManualRefresh()) {
+    if (canManualRefresh() && !isGuestMode) {
       await manualRefresh()
     }
   }
 
+  const tooltipContent = isGuestMode 
+    ? 'Pas de données à actualiser en mode invité' 
+    : timeLeft > 0 
+      ? `Disponible dans ${timeLeft} secondes` 
+      : 'Rafraîchir les données'
+
   return (
-    <button
-      onClick={handleRefresh}
-      disabled={!canManualRefresh()}
-      className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-      title={timeLeft > 0 ? `Disponible dans ${timeLeft} secondes` : 'Rafraîchir les données'}
-    >
-      <RefreshCw className="w-4 h-4" />
-      {timeLeft > 0 ? `${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}` : 'Rafraîchir'}
-    </button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            onClick={handleRefresh}
+            disabled={!canManualRefresh() || isGuestMode}
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Rafraîchir
+          </button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{tooltipContent}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }

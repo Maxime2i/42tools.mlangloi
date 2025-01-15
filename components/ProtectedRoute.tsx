@@ -10,7 +10,9 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken')
-    if (!accessToken) {
+    const isGuestMode = localStorage.getItem('guestMode')
+    
+    if (!accessToken && !isGuestMode) {
       router.push('/')
     }
   }, [router])

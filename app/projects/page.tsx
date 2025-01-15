@@ -288,16 +288,21 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     const initializeUserData = async () => {
-      if (!localStorage.getItem('accessToken')) {
+      const accessToken = localStorage.getItem('accessToken')
+      const isGuestMode = localStorage.getItem('guestMode')
+
+      if (!accessToken && !isGuestMode) {
         router.push('/')
         return
       }
 
-      try {
-        await fetchUserInfo()
-      } catch (error) {
-        console.error('Erreur:', error)
-        router.push('/')
+      if (!isGuestMode && !userInfo) {
+        try {
+          await fetchUserInfo()
+        } catch (error) {
+          console.error('Erreur:', error)
+          router.push('/')
+        }
       }
     }
 
@@ -309,7 +314,7 @@ export default function ProjectsPage() {
         cursus.cursus_id === 21
       )?.level || 0)
       
-      setUserProjects(userInfo.projects_users)
+      setUserProjects(userInfo.projects_users || [])
     }
   }, [userInfo, fetchUserInfo, router])
 
@@ -390,18 +395,24 @@ export default function ProjectsPage() {
           </div>
         </CardHeader>
         <CardContent className="pt-6">
-          <Progress 
-            value={Math.min((Number(calculateNewLevel()) / 21) * 100, 100)} 
-            className="h-2 bg-white/10" 
-            indicatorClassName="bg-gradient-to-r from-green-700 to-green-300"
-          />
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm text-gray-400">
+              <span>0</span>
+              <span>21</span>
+            </div>
+            <Progress 
+              value={Math.min((Number(calculateNewLevel()) / 21) * 100, 100)} 
+              className="h-2 bg-white/10" 
+              indicatorClassName="bg-gradient-to-r from-green-700 to-green-300"
+            />
+          </div>
         </CardContent>
       </Card>
 
 
       {/* Projets sélectionnés */}
       <Card className="border-white/10 bg-zinc-900/50 backdrop-blur">
-        <CardContent className="space-y-4">
+        <CardContent className="pt-6 space-y-4">
           {selectedProjects.map(project => (
             <div key={project.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border border-white/5 rounded-lg hover:border-white/20 transition-colors space-y-2 md:space-y-0">
               <div className="flex flex-col">
@@ -430,6 +441,18 @@ export default function ProjectsPage() {
               </div>
             </div>
           ))}
+          
+          {/* Ajout du total */}
+          {selectedProjects.length > 0 && (
+            <div className="pt-4 mt-4 border-t border-white/10 flex justify-between text-sm text-gray-400">
+              <span>
+                Total XP: {calculateTotalXP().toFixed(0)}
+              </span>
+              <span>
+                Total heures: {selectedProjects.reduce((total, project) => total + project.hours, 0)}
+              </span>
+            </div>
+          )}
         </CardContent>
       </Card>
 
