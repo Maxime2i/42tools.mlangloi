@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import PublicRoute from '@/components/PublicRoute'
 
 export default function CallbackPage() {
   const router = useRouter()
@@ -51,8 +52,10 @@ export default function CallbackPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <p>Authentification en cours...</p>
-    </div>
+    <PublicRoute>
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Authentification en cours...</p>
+      </div>
+    </PublicRoute>
   )
 }

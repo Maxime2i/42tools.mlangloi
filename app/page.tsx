@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import PublicRoute from '@/components/PublicRoute'
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -18,15 +19,17 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <button
-        onClick={handleLogin}
-        disabled={isLoading}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2"
-      >
-        <img src="/42_logo.svg" alt="42 logo" className="w-6 h-6" />
-        {isLoading ? 'Connexion en cours...' : 'Se connecter avec 42'}
-      </button>
-    </div>
+    <PublicRoute>
+      <div className="min-h-screen flex items-center justify-center">
+        <button
+          onClick={handleLogin}
+          disabled={isLoading}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2"
+        >
+          <img src="/42_logo.svg" alt="42 logo" className="w-6 h-6" />
+          {isLoading ? 'Connexion en cours...' : 'Se connecter avec 42'}
+        </button>
+      </div>
+    </PublicRoute>
   )
 }

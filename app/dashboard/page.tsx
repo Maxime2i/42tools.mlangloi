@@ -9,6 +9,9 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { useUserStore } from '@/store/userStore'
+import ProtectedRoute from '@/components/ProtectedRoute'
+import { LogOut } from 'lucide-react'
+
 
 interface UserInfo {
   login: string
@@ -64,6 +67,16 @@ export default function DashboardPage() {
     initializeUserData()
   }, [router, fetchUserInfo])
 
+  const handleLogout = () => {
+    // Supprimer les tokens
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    // Réinitialiser le store
+    useUserStore.getState().setUserInfo(null)
+    // Rediriger vers la page de login
+    router.push('/')
+  }
+
   if (!userInfo) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -73,6 +86,7 @@ export default function DashboardPage() {
   }
 
   return (
+    <ProtectedRoute>
     <div className="min-h-screen bg-black text-white p-4 md:p-8 space-y-4 md:space-y-8">
       <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
         Dashboard
@@ -187,6 +201,17 @@ export default function DashboardPage() {
 
 
       </div>
+      <div className="mt-8 flex justify-center">
+        <Button
+          onClick={handleLogout}
+          variant="destructive"
+          className="flex items-center gap-2"
+        >
+          <LogOut className="w-4 h-4" />
+          Se déconnecter
+        </Button>
+      </div>
     </div>
+    </ProtectedRoute>
   )
 }

@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 interface Project42 {
   id: number
@@ -865,6 +866,7 @@ export default function RNCPPage() {
   };
 
   return (
+    <ProtectedRoute>
     <div className="min-h-screen bg-black text-white p-4 md:p-8 space-y-4 md:space-y-8">
       <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
         Titres RNCP
@@ -972,5 +974,6 @@ export default function RNCPPage() {
         ))}
       </div>
     </div>
+    </ProtectedRoute>
   )
 }
