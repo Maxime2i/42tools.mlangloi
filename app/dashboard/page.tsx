@@ -61,10 +61,8 @@ export default function DashboardPage() {
       }
     }
 
-    if (!userInfo) {
-      initializeUserData()
-    }
-  }, [router, userInfo, fetchUserInfo])
+    initializeUserData()
+  }, [router, fetchUserInfo])
 
   if (!userInfo) {
     return (

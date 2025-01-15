@@ -32,16 +32,34 @@ interface UserInfo {
 
 interface UserStore {
   userInfo: UserInfo | null
+  lastUpdate: number | null
+  lastManualRefresh: number | null
   setUserInfo: (userInfo: UserInfo | null) => void
   fetchUserInfo: () => Promise<void>
+  shouldRefetch: () => boolean
+  canManualRefresh: () => boolean
+  manualRefresh: () => Promise<void>
 }
 
 export const useUserStore = create<UserStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       userInfo: null,
-      setUserInfo: (userInfo) => set({ userInfo }),
+      lastUpdate: null,
+      lastManualRefresh: null,
+      setUserInfo: (userInfo) => set({ userInfo, lastUpdate: Date.now() }),
+      shouldRefetch: () => {
+        const lastUpdate = get().lastUpdate
+        if (!lastUpdate) return true
+        // Rafraîchir si les données ont plus de 5 minutes
+        return Date.now() - lastUpdate > 30 * 60 * 1000
+      },
       fetchUserInfo: async () => {
+        // Si les données sont récentes, on ne refetch pas
+        if (!get().shouldRefetch() && get().userInfo) {
+          return
+        }
+
         const token = localStorage.getItem('accessToken')
         if (!token) return
 
@@ -55,7 +73,39 @@ export const useUserStore = create<UserStore>()(
           if (!response.ok) throw new Error('Erreur de récupération des données')
 
           const data = await response.json()
-          set({ userInfo: data })
+          set({ userInfo: data, lastUpdate: Date.now() })
+        } catch (error) {
+          console.error('Erreur:', error)
+          localStorage.removeItem('accessToken')
+          throw error
+        }
+      },
+      canManualRefresh: () => {
+        const lastRefresh = get().lastManualRefresh
+        if (!lastRefresh) return true
+        return Date.now() - lastRefresh > 5 * 60 * 1000 // 5 minutes
+      },
+      manualRefresh: async () => {
+        if (!get().canManualRefresh()) return
+
+        const token = localStorage.getItem('accessToken')
+        if (!token) return
+
+        try {
+          const response = await fetch('https://api.intra.42.fr/v2/me', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+
+          if (!response.ok) throw new Error('Erreur de récupération des données')
+
+          const data = await response.json()
+          set({ 
+            userInfo: data, 
+            lastUpdate: Date.now(),
+            lastManualRefresh: Date.now()
+          })
         } catch (error) {
           console.error('Erreur:', error)
           localStorage.removeItem('accessToken')
