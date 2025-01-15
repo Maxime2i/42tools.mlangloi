@@ -73,8 +73,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-8 space-y-8">
-      <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
+    <div className="min-h-screen bg-black text-white p-4 md:p-8 space-y-4 md:space-y-8">
+      <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
         Dashboard
       </h1>
       
@@ -116,7 +116,7 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         <Card className="border-white/10 bg-zinc-900/50 backdrop-blur">
           <CardHeader>
             <CardTitle className="text-2xl font-light tracking-tight text-white">

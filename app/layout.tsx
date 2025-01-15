@@ -31,9 +31,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white min-h-screen`}>
         <header className="border-b border-white/10 bg-black/80 backdrop-blur-xl supports-[backdrop-filter]:bg-black/60 sticky top-0 z-50">
           <div className="container mx-auto px-4">
-            <div className="flex justify-between items-center h-16">
+            <div className="flex flex-col sm:flex-row justify-between items-center h-auto sm:h-16 py-4 sm:py-0">
               <NavigationMenu>
-                <NavigationMenuList className="space-x-8">
+                <NavigationMenuList className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8">
                   <NavigationMenuItem>
                     <Image 
                       src="/logo.png" 
@@ -69,7 +69,9 @@ export default function RootLayout({
                   </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
-              <RefreshButton />
+              <div className="mt-4 md:mt-0">
+                <RefreshButton />
+              </div>
             </div>
           </div>
         </header>

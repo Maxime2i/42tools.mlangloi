@@ -368,21 +368,23 @@ export default function ProjectsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-8 space-y-8">
-      <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
+    <div className="min-h-screen bg-black text-white p-4 md:p-8 space-y-4 md:space-y-8">
+      <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
         Simulateur de niveau
       </h1>
 
       {/* Barre de niveau */}
       <Card className="border-white/10 bg-zinc-900/50 backdrop-blur">
         <CardHeader className="border-b border-white/10">
-          <div className="flex justify-between items-center">
-            <CardTitle className="text-2xl font-light tracking-tight text-white">
-              Niveau actuel : {userLevel.toFixed(2)}
-            </CardTitle>
-            <CardTitle className="text-2xl font-light tracking-tight text-white/80">
-              Niveau simulé : {calculateNewLevel()}
-            </CardTitle>
+          <div className="flex flex-col space-y-2">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center">
+              <CardTitle className="text-2xl font-light tracking-tight text-white">
+                Niveau actuel : {userLevel.toFixed(2)}
+              </CardTitle>
+              <CardTitle className="text-2xl font-light tracking-tight text-white/80 mt-2 md:mt-0">
+                Niveau simulé : {calculateNewLevel()}
+              </CardTitle>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="pt-6">
@@ -397,56 +399,35 @@ export default function ProjectsPage() {
 
       {/* Projets sélectionnés */}
       <Card className="border-white/10 bg-zinc-900/50 backdrop-blur">
-        <CardHeader>
-          <CardTitle className="text-2xl font-light tracking-tight text-white">
-            Projets sélectionnés
-          </CardTitle>
-        </CardHeader>
         <CardContent className="space-y-4">
           {selectedProjects.map(project => (
-              <div
-              key={project.id}
-              className="flex justify-between items-center p-4 border border-white/5 rounded-lg hover:border-white/20 transition-colors"
-            >
+            <div key={project.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border border-white/5 rounded-lg hover:border-white/20 transition-colors space-y-2 md:space-y-0">
               <div className="flex flex-col">
                 <span className="font-medium text-white">{project.name}</span>
-                <span className="text-sm text-gray-400">
-                  XP: {project.xp} - {project.hours}h
-                </span>
+                <span className="text-sm text-gray-400">XP: {project.xp} - {project.hours}h</span>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-white">
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4 w-full md:w-auto">
+                <div className="flex items-center gap-2 text-white w-full md:w-auto">
                   <input
                     type="number"
                     min="0"
                     max="125"
                     value={project.mark}
                     onChange={(e) => handleMarkChange(project.id, Number(e.target.value))}
-                    className="w-16 text-right px-2 py-1 bg-zinc-800 border border-white/10 rounded text-white"
+                    className="w-full md:w-16 text-right px-2 py-1 bg-zinc-800 border border-white/10 rounded text-white"
                   />
                   <span>/125</span>
                 </div>
                 <Button
                   onClick={() => handleRemoveProject(project.id)}
                   variant="ghost"
-                  className="text-red-400 hover:text-red-300 hover:bg-red-950/20"
+                  className="text-red-400 hover:text-red-300 hover:bg-red-950/20 w-full md:w-auto"
                 >
                   Supprimer
                 </Button>
               </div>
             </div>
           ))}
-          
-          {selectedProjects.length > 0 && (
-            <div className="pt-4 mt-4 border-t border-white/10 flex justify-between text-sm text-gray-400">
-              <span>
-                Total XP: {selectedProjects.reduce((sum, project) => sum + project.xp, 0).toLocaleString()}
-              </span>
-              <span>
-                Total heures: {selectedProjects.reduce((sum, project) => sum + project.hours, 0).toLocaleString()}h
-              </span>
-            </div>
-          )}
         </CardContent>
       </Card>
 

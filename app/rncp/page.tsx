@@ -865,13 +865,13 @@ export default function RNCPPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-8 space-y-8">
-      <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
+    <div className="min-h-screen bg-black text-white p-4 md:p-8 space-y-4 md:space-y-8">
+      <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
         Titres RNCP
       </h1>
 
       {/* Les deux titres RNCP */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {Object.entries(titles).map(([titleId, title]) => (
           <Card key={titleId} className="border-white/10 bg-zinc-900/50 backdrop-blur">
             <CardHeader>
@@ -885,14 +885,18 @@ export default function RNCPPage() {
       </div>
 
       {/* Options */}
-      <div className="flex gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:flex xl:flex-row gap-4">
         {Object.entries(titles).flatMap(([titleId, title]) =>
           Object.entries(title.options).map(([optionId, option]) => (
             <Button
               key={`${titleId}-${optionId}`}
               onClick={() => setActiveOption(optionId)}
-              variant={activeOption === optionId ? "default" : "secondary"}
-              className="flex-1"
+              variant={activeOption === optionId ? "secondary" : "default"}
+              className={`w-full xl:flex-1 ${
+                activeOption === optionId 
+                  ? "bg-white text-black hover:bg-gray-200" 
+                  : "bg-transparent text-white border border-white/10 hover:bg-white/10"
+              }`}
             >
               {option.name}
             </Button>
@@ -900,131 +904,73 @@ export default function RNCPPage() {
         )}
       </div>
 
-      {/* Section de progression */}
-      {activeData && (
-        <Card className="border-white/10 bg-zinc-900/50 backdrop-blur">
-          <CardHeader>
-            <CardTitle className="text-2xl font-light tracking-tight text-white">
-              {activeData.titleName} - {activeData.option.name}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-8">
-            {/* Prérequis communs */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-medium text-white">Prérequis communs</h4>
-              <div className="grid grid-cols-2 gap-4">
-                {/* Cartes de prérequis */}
-                <Card className="border-white/10 bg-zinc-800/50">
-                  <CardContent className="pt-6">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-400">Level minimum</span>
-                      <Badge variant={userLevel >= (activeData.titleId === 'rncp6' ? 17 : 21) ? "success" : "destructive"}>
-                        {userLevel.toFixed(2)} / {activeData.titleId === 'rncp6' ? '17' : '21'}
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="border-white/10 bg-zinc-800/50">
-                  <CardContent className="pt-6">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-400">Projets de groupe</span>
-                      <Badge variant={groupProjects >= 2 ? "success" : "destructive"}>
-                        {groupProjects} / 2
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="border-white/10 bg-zinc-800/50">
-                  <CardContent className="pt-6">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-400">Événements pédagogiques</span>
-                      <Badge variant={pedagogicalEvents >= (activeData.titleId === 'rncp6' ? 10 : 15) ? "success" : "destructive"}>
-                        {pedagogicalEvents} / {activeData.titleId === 'rncp6' ? '10' : '15'}
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="border-white/10 bg-zinc-800/50">
-                  <CardContent className="pt-6">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-400">Expériences professionnelles</span>
-                      <Badge variant={professionalExperiences >= 2 ? "success" : "destructive"}>
-                        {professionalExperiences} / 2
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
+      {/* Catégories de projets */}
+      <div className={`grid gap-4 ${
+        Object.keys(activeData.option.categories).length === 2 
+          ? 'grid-cols-1 sm:grid-cols-2' :
+        Object.keys(activeData.option.categories).length === 3 
+          ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' :
+        'grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'
+      }`}>
+        {/* Pour chaque catégorie */}
+        {Object.entries(activeData.option.categories).map(([catId, category]) => (
+          <Card key={catId} className="border-white/10 bg-zinc-800/50">
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-white">
+                {category.name}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Stats de la catégorie */}
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">XP</span>
+                  <span className="text-white">{calculateCategoryXP(category.projects)} / {category.requiredXP}</span>
+                </div>
+                <Progress 
+                  key={updateTrigger}
+                  value={(calculateCategoryXP(category.projects) / category.requiredXP) * 100} 
+                  className="h-2 bg-white/10" 
+                  indicatorClassName={cn(
+                    "transition-all duration-500",
+                    calculateCategoryXP(category.projects) >= category.requiredXP
+                      ? "bg-gradient-to-r from-green-700 to-green-300"
+                      : "bg-gradient-to-r from-red-900 to-red-500"
+                  )}
+                />
               </div>
-            </div>
 
-            {/* Catégories de projets */}
-            <div className={`grid gap-6 ${
-              Object.keys(activeData.option.categories).length === 2 ? 'grid-cols-2' :
-              Object.keys(activeData.option.categories).length === 3 ? 'grid-cols-3' :
-              'grid-cols-4'
-            }`}>
-              {/* Pour chaque catégorie */}
-              {Object.entries(activeData.option.categories).map(([catId, category]) => (
-                <Card key={catId} className="border-white/10 bg-zinc-800/50">
-                  <CardHeader>
-                    <CardTitle className="text-lg font-medium text-white">
-                      {category.name}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {/* Stats de la catégorie */}
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">XP</span>
-                        <span className="text-white">{calculateCategoryXP(category.projects)} / {category.requiredXP}</span>
+              {/* Liste des projets */}
+              <div className="space-y-2">
+                {category.projects.map(project => (
+                  <Card key={project.id} className={`border-white/10 ${
+                    isProjectCompleted(project.id) ? 'bg-emerald-900/20' : 'bg-zinc-900/50'
+                  }`}>
+                    <CardContent className="p-4">
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div className="w-full sm:w-auto">
+                          <p className="text-sm font-medium text-white">{project.name}</p>
+                          <p className="text-xs text-gray-400">{project.xp} XP</p>
+                        </div>
+                        <div className="flex items-center gap-2 w-full sm:w-auto">
+                          <Input
+                            type="number"
+                            min="0"
+                            max="125"
+                            value={getProjectMark(project.id)}
+                            onChange={(e) => handleMarkChange(project.id, Number(e.target.value))}
+                            className="w-full sm:w-20 h-8 text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          />
+                        </div>
                       </div>
-                      <Progress 
-                        key={updateTrigger}
-                        value={(calculateCategoryXP(category.projects) / category.requiredXP) * 100} 
-                        className="h-2 bg-white/10" 
-                        indicatorClassName={cn(
-                          "transition-all duration-500",
-                          calculateCategoryXP(category.projects) >= category.requiredXP
-                            ? "bg-gradient-to-r from-green-700 to-green-300"
-                            : "bg-gradient-to-r from-red-900 to-red-500"
-                        )}
-                      />
-                    </div>
-
-                    {/* Liste des projets */}
-                    <div className="space-y-2">
-                      {category.projects.map(project => (
-                        <Card key={project.id} className={`border-white/10 ${
-                          isProjectCompleted(project.id) ? 'bg-emerald-900/20' : 'bg-zinc-900/50'
-                        }`}>
-                          <CardContent className="p-4">
-                            <div className="flex justify-between items-center">
-                              <div>
-                                <p className="text-sm font-medium text-white">{project.name}</p>
-                                <p className="text-xs text-gray-400">{project.xp} XP</p>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Input
-                                  type="number"
-                                  min="0"
-                                  max="125"
-                                  value={getProjectMark(project.id)}
-                                  onChange={(e) => handleMarkChange(project.id, Number(e.target.value))}
-                                  className="w-14 h-8 text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                />
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   )
 }
