@@ -228,6 +228,19 @@ export default function DashboardPage() {
           Se déconnecter
         </Button>
       </div>
+      <div className="mt-16 text-center text-sm text-gray-400">
+        <p>
+          Si vous appréciez 42Tools, n'hésitez pas à laisser une ⭐ sur{' '}
+          <a 
+            href="https://github.com/Maxime2i/42tools.mlangloi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white hover:text-gray-300 underline underline-offset-4"
+          >
+            GitHub
+          </a>
+        </p>
+      </div>
     </div>
     </ProtectedRoute>
   )
