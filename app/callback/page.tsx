@@ -11,7 +11,6 @@ export default function CallbackPage() {
     const handleCallback = async () => {
       const urlParams = new URLSearchParams(window.location.search)
       const code = urlParams.get('code')
-      console.log('Code reçu:', code)
 
       if (code) {
         try {
@@ -30,7 +29,6 @@ export default function CallbackPage() {
           }
 
           const data = await response.json()
-          console.log('Données reçues:', data)
           
           if (data.access_token) {
             localStorage.setItem('accessToken', data.access_token)

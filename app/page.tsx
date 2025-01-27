@@ -23,7 +23,6 @@ export default function LoginPage() {
   }
 
   const handleGuestLogin = () => {
-    // Créer un utilisateur invité fictif
     const guestUser = {
       login: 'guest',
       email: 'guest@example.com',
@@ -55,7 +54,6 @@ export default function LoginPage() {
       projects_users: []
     }
 
-    // Stocker les informations de l'invité
     localStorage.setItem('guestMode', 'true')
     setUserInfo(guestUser)
     router.push('/dashboard')

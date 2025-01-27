@@ -36,7 +36,6 @@ export const generateMetadata = async ({ params, searchParams }): Promise<Metada
     console.error('Erreur lors du chargement des métadonnées:', error)
   }
   
-  // Métadonnées par défaut (page d'accueil)
   const { metadata } = await import('./metadata')
   return metadata
 }

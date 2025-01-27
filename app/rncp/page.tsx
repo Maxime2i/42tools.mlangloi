@@ -305,25 +305,20 @@ export default function RNCPPage() {
     initializeUserData()
   }, [router, fetchUserInfo])
 
-  // Effet séparé pour mettre à jour les états quand userInfo change
   useEffect(() => {
     if (userInfo) {
-      // Définir le level
       setUserLevel(userInfo.cursus_users?.find((cursus: any) => 
         cursus.cursus_id === 21
       )?.level || 0)
 
-      // Récupérer les projets depuis userInfo
       if (userInfo.projects_users) {
         setUserProjects(userInfo.projects_users)
 
-        // Compter les projets de groupe validés
         const validatedProjects = userInfo.projects_users.filter((project: any) => 
           project.status === "finished" && 
           project["validated?"] === true
         );
 
-        // Trouver les projets correspondants dans availableProjects
         const groupProjectsCount = validatedProjects.reduce((count, userProject) => {
           const projectInList = availableProjects.find(p => {
             const normalizedUserSlug = userProject.project.slug.toLowerCase()
@@ -334,14 +329,12 @@ export default function RNCPPage() {
             return normalizedUserSlug === normalizedListSlug;
           });
 
-          // Incrémenter le compteur si c'est un projet de groupe
           return projectInList?.group ? count + 1 : count;
         }, 0);
 
         setGroupProjects(groupProjectsCount);
       }
 
-      // Compter les événements pédagogiques
       if (userInfo.events) {
         const pedagogicalEventsCount = userInfo.events.filter((event: any) => 
           event.event_type === "conference" || 
@@ -353,7 +346,6 @@ export default function RNCPPage() {
         setPedagogicalEvents(pedagogicalEventsCount)
       }
 
-      // Liste des slugs valides pour les expériences professionnelles
       const validProfessionalSlugs = [
         '42cursus-startup-internship',
         'internship-ii',
@@ -363,7 +355,6 @@ export default function RNCPPage() {
         'apprentissage-2-ans-2eme-annee',
       ];
 
-      // Compter les expériences professionnelles
       if (userInfo.projects_users) {
         const professionalProjectsCount = userInfo.projects_users.filter((project: any) => {
           const projectSlug = project.project.slug.toLowerCase();
@@ -372,23 +363,13 @@ export default function RNCPPage() {
                  project["validated?"] === true;
         }).length;
 
-        // Ajouter les internships s'ils existent
         const internshipsCount = userInfo.internships?.length || 0;
 
         setProfessionalExperiences(professionalProjectsCount + internshipsCount);
       }
-
-      // Debug pour voir la structure des données
-      console.log('userInfo structure:', {
-        cursus_users: userInfo.cursus_users,
-        projects_users: userInfo.projects_users,
-        events: userInfo.events,
-        internships: userInfo.internships
-      });
     }
   }, [userInfo, availableProjects]);
 
-  // Fonction pour vérifier si un projet est complété
   const isProjectCompleted = (projectId: string): boolean => {
     const project = userProjects.find(p => {
       const projectSlug = p.project.slug.toLowerCase();
@@ -400,34 +381,21 @@ export default function RNCPPage() {
              projectSlug.replace('42cursus-', '').replace(/[-_]/g, '') === searchSlug.replace(/[-_]/g, '');
     });
 
-    // Vérifier d'abord la note simulée
     const simulatedMark = simulatedMarks[projectId];
     if (simulatedMark !== undefined) {
-      return simulatedMark >= 75; // Considéré comme validé si >= 75
+      return simulatedMark >= 75;
     }
 
-    // Sinon utiliser la note réelle
     return project?.status === 'finished' && project["validated?"] === true;
   }
 
-  // Fonction pour calculer l'XP totale et traiter les projets
   const processProjects = (projects: any[]) => {
     let totalXP = 0;
     
     const processedProjects = projects.map(project => {
-      // Vérifier si le projet est validé et terminé
       const isValidated = project["validated?"] === true && project.status === "finished";
       const finalMark = project.final_mark;
       
-      // Debug
-      console.log(`Project ${project.project.name}:`, {
-        isValidated,
-        status: project.status,
-        validated: project["validated?"],
-        mark: finalMark
-      });
-      
-      // Calculer l'XP
       if (isValidated && finalMark) {
         totalXP += finalMark * 100;
       }
@@ -765,7 +733,6 @@ export default function RNCPPage() {
   const getActiveOptionData = () => {
     for (const [titleId, title] of Object.entries(titles)) {
       if (Object.keys(title.options).includes(activeOption)) {
-        // Mettre à jour l'état completed des projets
         const updatedTitle = {
           ...title,
           options: {
@@ -800,44 +767,35 @@ export default function RNCPPage() {
 
   const activeData = getActiveOptionData()
 
-  // Ajouter cette fonction pour gérer les changements de notes
   const handleMarkChange = (projectId: string, mark: number) => {
-    // Limiter la note entre 0 et 125
     const validMark = Math.min(Math.max(mark, 0), 125);
     setSimulatedMarks(prev => ({
       ...prev,
       [projectId]: validMark
     }));
-    // Forcer un re-rendu
     setUpdateTrigger(prev => prev + 1);
   };
 
-  // Ajouter cette fonction pour calculer l'XP d'un projet
   const calculateProjectXP = (project: any, mark: number): number => {
     if (mark < 75) {
-      return 0; // Projet non validé
+      return 0; 
     }
     
-    // L'XP de base est calculé sur une note de 100
     let xp = project.xp;
     
-    // Si la note est supérieure à 100, ajouter un bonus
     if (mark > 100) {
-      // Le bonus est proportionnel aux points au-dessus de 100 (max 25% bonus)
-      const bonusPercentage = (mark - 100) / 100;  // 25 points = 25% bonus
+      const bonusPercentage = (mark - 100) / 100;
       xp += project.xp * bonusPercentage;
     }
     
     return Math.round(xp);
   };
 
-  // Ajouter cette fonction pour calculer l'XP total d'une catégorie
   const calculateCategoryXP = (projects: any[]): number => {
     return projects.reduce((total, project) => {
       const mark = getProjectMark(project.id);
-      if (mark >= 75) { // Projet validé si note >= 75
+      if (mark >= 75) {
         let xp = project.xp;
-        // Bonus si note > 100
         if (mark > 100) {
           const bonusPercentage = (mark - 100) / 100;
           xp += project.xp * bonusPercentage;
@@ -849,12 +807,10 @@ export default function RNCPPage() {
   };
 
   const getProjectMark = (projectId: string): number => {
-    // Vérifier d'abord s'il y a une note simulée
     if (simulatedMarks[projectId] !== undefined) {
       return simulatedMarks[projectId];
     }
 
-    // Sinon chercher la note réelle du projet
     const project = userProjects.find(p => {
       const projectSlug = p.project.slug.toLowerCase();
       const searchSlug = projectId.toLowerCase();

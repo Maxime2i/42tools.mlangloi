@@ -51,11 +51,9 @@ export const useUserStore = create<UserStore>()(
       shouldRefetch: () => {
         const lastUpdate = get().lastUpdate
         if (!lastUpdate) return true
-        // Rafraîchir si les données ont plus de 5 minutes
         return Date.now() - lastUpdate > 30 * 60 * 1000
       },
       fetchUserInfo: async () => {
-        // Si les données sont récentes, on ne refetch pas
         if (!get().shouldRefetch() && get().userInfo) {
           return
         }

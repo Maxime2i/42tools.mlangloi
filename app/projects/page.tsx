@@ -309,7 +309,6 @@ export default function ProjectsPage() {
     if (!userInfo) {
       initializeUserData()
     } else {
-      // Mettre à jour les états avec les données du store
       setUserLevel(userInfo.cursus_users.find((cursus: any) => 
         cursus.cursus_id === 21
       )?.level || 0)
@@ -337,17 +336,12 @@ export default function ProjectsPage() {
   }
 
   const calculateNewLevel = () => {
-    // On récupère l'XP des nouveaux projets
     const additionalXP = calculateTotalXP()
     
-    // On convertit le niveau actuel en XP approximative
-    // Formule inverse de celle utilisée pour calculer le niveau
     const currentLevelXP = Math.pow(userLevel * 2, 2) * 100
     
-    // On additionne l'XP actuelle et l'XP additionnelle
     const totalXP = currentLevelXP + additionalXP
     
-    // On reconvertit en niveau
     return (Math.sqrt(totalXP / 100) / 2).toFixed(2)
   }
 

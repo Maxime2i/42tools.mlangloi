@@ -27,7 +27,6 @@ interface UserInfo {
   pool_year: string
 }
 
-// Ajout de la fonction de traduction des mois
 const translateMonth = (month: string): string => {
   const monthTranslations: { [key: string]: string } = {
     'january': 'Janvier',
@@ -74,13 +73,12 @@ export default function DashboardPage() {
   }, [router, fetchUserInfo, userInfo])
 
   const handleLogout = () => {
-    // Supprimer les tokens et le mode invité
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
     localStorage.removeItem('guestMode')
-    // Réinitialiser le store
+
     useUserStore.getState().setUserInfo(null)
-    // Rediriger vers la page de login
+
     router.push('/')
   }
 
