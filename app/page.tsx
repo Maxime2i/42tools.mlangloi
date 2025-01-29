@@ -4,7 +4,8 @@ import { useState } from 'react'
 import PublicRoute from '@/components/PublicRoute'
 import { useUserStore } from '@/store/userStore'
 import { useRouter } from 'next/navigation'
-
+import Image from 'next/image'
+import { UserInfo } from '@/store/userStore'
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -55,7 +56,7 @@ export default function LoginPage() {
     }
 
     localStorage.setItem('guestMode', 'true')
-    setUserInfo(guestUser)
+    setUserInfo(guestUser as unknown as UserInfo)
     router.push('/dashboard')
   }
 
@@ -67,7 +68,7 @@ export default function LoginPage() {
           disabled={isLoading}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2"
         >
-          <img src="/logo.png" alt="42 logo" className="w-6 h-6" />
+          <Image src="/logo.png" alt="42 logo" className="w-6 h-6" width={24} height={24} />
           {isLoading ? 'Connexion en cours...' : 'Se connecter avec 42'}
         </button>
 

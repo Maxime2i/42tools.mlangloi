@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-interface UserInfo {
+export interface UserInfo {
   id: number
   login: string
   email: string
@@ -12,6 +12,10 @@ interface UserInfo {
   cursus_users: Array<{
     cursus_id: number
     level: number
+    skills: Array<{
+      name: string
+      level: number
+    }>
   }>
   projects_users: Array<{
     project: {
@@ -21,13 +25,17 @@ interface UserInfo {
       solo: boolean
     }
     status: string
-    validated?: boolean
+    validated: boolean
     final_mark: number
+    marked_at: string
   }>
   events: Array<{
     event_type: string
   }>
   internships: Array<any>
+  campus: Array<any>
+  pool_month: string
+  pool_year: string
 }
 
 interface UserStore {
@@ -71,6 +79,16 @@ export const useUserStore = create<UserStore>()(
           if (!response.ok) throw new Error('Erreur de récupération des données')
 
           const data = await response.json()
+
+          if (data.projects_users) {
+            data.projects_users = data.projects_users.map((project: any) => ({
+              ...project,
+              validated: project['validated?'],
+            }))
+          }
+
+          console.log("datav2", data)
+
           set({ userInfo: data, lastUpdate: Date.now() })
         } catch (error) {
           console.error('Erreur:', error)

@@ -11,15 +11,45 @@ import { cn } from "@/lib/utils"
 import ProtectedRoute from '@/components/ProtectedRoute'
 
 interface Project42 {
-  id: number
-  project: {
-    slug: string
-    name: string
-  }
-  status: string
+  id?: string
+  name?: string
+  xp?: number
+  mark?: number
+  hours?: number
+  group?: boolean
   validated?: boolean
-  "final_mark": number | null
+  status?: string
+  project?: {
+    id: number
+    name: string
+    slug: string
+  }
+  final_mark?: number
 }
+
+type Project = {
+  id: string;
+  name: string;
+  completed: boolean;
+  // Ajoutez d'autres propriétés si nécessaire
+};
+
+type Category = {
+  name: string;
+  projects: Project[];
+};
+
+type Option = {
+  name: string;
+  categories: Record<string, Category>;
+};
+
+type Title = {
+  name: string;
+  options: Record<string, Option>;
+};
+
+type Titles = Record<string, Title>;
 
 export default function RNCPPage() {
   const [activeOption, setActiveOption] = useState('web')
@@ -33,7 +63,7 @@ export default function RNCPPage() {
   const { userInfo, fetchUserInfo } = useUserStore()
   const [updateTrigger, setUpdateTrigger] = useState(0);
 
-  const [availableProjects, setAvailableProjects] = useState<Project[]>([
+  const [availableProjects] = useState<Project42[]>([
     { id: 'ft_transcendence', name: 'Ft_transcendence', xp: 24360, mark: 0, hours: 245, group: true },
     { id: '42run', name: '42run', xp: 9450, mark: 0, hours: 98, group: false },
     { id: '42sh', name: '42sh', xp: 15750, mark: 0, hours: 294, group: true },
@@ -303,7 +333,7 @@ export default function RNCPPage() {
     }
 
     initializeUserData()
-  }, [router, fetchUserInfo])
+  }, [userInfo, fetchUserInfo, router])
 
   useEffect(() => {
     if (userInfo) {
@@ -316,7 +346,7 @@ export default function RNCPPage() {
 
         const validatedProjects = userInfo.projects_users.filter((project: any) => 
           project.status === "finished" && 
-          project["validated?"] === true
+          project.validated === true
         );
 
         const groupProjectsCount = validatedProjects.reduce((count, userProject) => {
@@ -324,7 +354,7 @@ export default function RNCPPage() {
             const normalizedUserSlug = userProject.project.slug.toLowerCase()
               .replace('42cursus-', '')
               .replace(/[-_]/g, '');
-            const normalizedListSlug = p.id.toLowerCase()
+            const normalizedListSlug = p?.id?.toLowerCase()
               .replace(/[-_]/g, '');
             return normalizedUserSlug === normalizedListSlug;
           });
@@ -360,7 +390,7 @@ export default function RNCPPage() {
           const projectSlug = project.project.slug.toLowerCase();
           return validProfessionalSlugs.includes(projectSlug) &&
                  project.status === "finished" &&
-                 project["validated?"] === true;
+                 project.validated === true;
         }).length;
 
         const internshipsCount = userInfo.internships?.length || 0;
@@ -372,13 +402,12 @@ export default function RNCPPage() {
 
   const isProjectCompleted = (projectId: string): boolean => {
     const project = userProjects.find(p => {
-      const projectSlug = p.project.slug.toLowerCase();
+      const projectSlug = p?.project?.slug.toLowerCase();
       const searchSlug = projectId.toLowerCase();
       return projectSlug === searchSlug ||
-             projectSlug === `42cursus-${searchSlug}` ||
-             projectSlug.replace('42cursus-', '') === searchSlug ||
-             projectSlug.replace(/[-_]/g, '') === searchSlug.replace(/[-_]/g, '') ||
-             projectSlug.replace('42cursus-', '').replace(/[-_]/g, '') === searchSlug.replace(/[-_]/g, '');
+             projectSlug?.replace('42cursus-', '') === searchSlug ||
+             projectSlug?.replace(/[-_]/g, '') === searchSlug.replace(/[-_]/g, '') ||
+             projectSlug?.replace('42cursus-', '').replace(/[-_]/g, '') === searchSlug.replace(/[-_]/g, '');
     });
 
     const simulatedMark = simulatedMarks[projectId];
@@ -386,47 +415,8 @@ export default function RNCPPage() {
       return simulatedMark >= 75;
     }
 
-    return project?.status === 'finished' && project["validated?"] === true;
+    return project?.status === 'finished' && project.validated === true;
   }
-
-  const processProjects = (projects: any[]) => {
-    let totalXP = 0;
-    
-    const processedProjects = projects.map(project => {
-      const isValidated = project["validated?"] === true && project.status === "finished";
-      const finalMark = project.final_mark;
-      
-      if (isValidated && finalMark) {
-        totalXP += finalMark * 100;
-      }
-
-      return {
-        id: project.id,
-        name: project.project.name,
-        slug: project.project.slug,
-        status: project.status,
-        validated: isValidated,
-        mark: finalMark,
-        created_at: project.created_at,
-        marked_at: project.marked_at
-      };
-    });
-
-    return {
-      projects: processedProjects,
-      totalXP
-    };
-  };
-
-  const [projectsData, setProjectsData] = useState({
-    projects: [],
-    totalXP: 0
-  });
-
-  useEffect(() => {
-    const { projects, totalXP } = processProjects(userProjects);
-    setProjectsData({ projects, totalXP });
-  }, [userProjects]);
 
   const titles = {
     rncp6: {
@@ -730,9 +720,9 @@ export default function RNCPPage() {
     }
   }
 
-  const getActiveOptionData = () => {
+  const getActiveOptionData = (titles: Titles, activeOption: string) => {
     for (const [titleId, title] of Object.entries(titles)) {
-      if (Object.keys(title.options).includes(activeOption)) {
+      if (title.options[activeOption]) {
         const updatedTitle = {
           ...title,
           options: {
@@ -765,7 +755,7 @@ export default function RNCPPage() {
     return null
   }
 
-  const activeData = getActiveOptionData()
+  const activeData = getActiveOptionData(titles, activeOption)
 
   const handleMarkChange = (projectId: string, mark: number) => {
     const validMark = Math.min(Math.max(mark, 0), 125);
@@ -776,20 +766,7 @@ export default function RNCPPage() {
     setUpdateTrigger(prev => prev + 1);
   };
 
-  const calculateProjectXP = (project: any, mark: number): number => {
-    if (mark < 75) {
-      return 0; 
-    }
-    
-    let xp = project.xp;
-    
-    if (mark > 100) {
-      const bonusPercentage = (mark - 100) / 100;
-      xp += project.xp * bonusPercentage;
-    }
-    
-    return Math.round(xp);
-  };
+ 
 
   const calculateCategoryXP = (projects: any[]): number => {
     return projects.reduce((total, project) => {
@@ -812,13 +789,13 @@ export default function RNCPPage() {
     }
 
     const project = userProjects.find(p => {
-      const projectSlug = p.project.slug.toLowerCase();
+      const projectSlug = p?.project?.slug.toLowerCase();
       const searchSlug = projectId.toLowerCase();
       return projectSlug === searchSlug ||
              projectSlug === `42cursus-${searchSlug}` ||
-             projectSlug.replace('42cursus-', '') === searchSlug ||
-             projectSlug.replace(/[-_]/g, '') === searchSlug.replace(/[-_]/g, '') ||
-             projectSlug.replace('42cursus-', '').replace(/[-_]/g, '') === searchSlug.replace(/[-_]/g, '');
+             projectSlug?.replace('42cursus-', '') === searchSlug ||
+             projectSlug?.replace(/[-_]/g, '') === searchSlug.replace(/[-_]/g, '') ||
+             projectSlug?.replace('42cursus-', '').replace(/[-_]/g, '') === searchSlug.replace(/[-_]/g, '');
     });
 
     return project?.final_mark || 0;
@@ -887,8 +864,8 @@ export default function RNCPPage() {
           <CardContent className="pt-6">
             <div className="flex justify-between items-center">
               <span className="text-gray-400">Level minimum</span>
-              <Badge variant={userLevel >= (activeData.titleId === 'rncp6' ? 17 : 21) ? "success" : "destructive"}>
-                {userLevel.toFixed(2)} / {activeData.titleId === 'rncp6' ? '17' : '21'}
+              <Badge variant={userLevel >= (activeData?.titleId === 'rncp6' ? 17 : 21) ? "success" : "destructive"}>
+                {userLevel.toFixed(2)} / {activeData?.titleId === 'rncp6' ? '17' : '21'}
               </Badge>
             </div>
           </CardContent>
@@ -909,8 +886,8 @@ export default function RNCPPage() {
           <CardContent className="pt-6">
             <div className="flex justify-between items-center">
               <span className="text-gray-400">Événements pédagogiques</span>
-              <Badge variant={pedagogicalEvents >= (activeData.titleId === 'rncp6' ? 10 : 15) ? "success" : "destructive"}>
-                {pedagogicalEvents} / {activeData.titleId === 'rncp6' ? '10' : '15'}
+              <Badge variant={pedagogicalEvents >= (activeData?.titleId === 'rncp6' ? 10 : 15) ? "success" : "destructive"}>
+                {pedagogicalEvents} / {activeData?.titleId === 'rncp6' ? '10' : '15'}
               </Badge>
             </div>
           </CardContent>
@@ -930,70 +907,76 @@ export default function RNCPPage() {
 
       {/* Catégories de projets */}
       <div className={`grid gap-4 ${
-        Object.keys(activeData.option.categories).length === 2 
-          ? 'grid-cols-1 sm:grid-cols-2' :
-        Object.keys(activeData.option.categories).length === 3 
-          ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' :
-        'grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'
+        activeData?.option.categories 
+          ? Object.keys(activeData.option.categories).length === 2 
+            ? 'grid-cols-1 sm:grid-cols-2' 
+            : Object.keys(activeData.option.categories).length === 3 
+            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' 
+            : 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'
+          : 'grid-cols-1' // Valeur par défaut si categories est undefined
       }`}>
         {/* Pour chaque catégorie */}
-        {Object.entries(activeData.option.categories).map(([catId, category]) => (
-          <Card key={catId} className="border-white/10 bg-zinc-800/50">
-            <CardHeader>
-              <CardTitle className="text-lg font-medium text-white">
-                {category.name}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Stats de la catégorie */}
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-400">XP</span>
-                  <span className="text-white">{calculateCategoryXP(category.projects)} / {category.requiredXP}</span>
+        {activeData?.option.categories ? (
+          Object.entries(activeData.option.categories).map(([catId, category]: [string, any]) => (
+            <Card key={catId} className="border-white/10 bg-zinc-800/50">
+              <CardHeader>
+                <CardTitle className="text-lg font-medium text-white">
+                  {category.name}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Stats de la catégorie */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-400">XP</span>
+                    <span className="text-white">{calculateCategoryXP(category.projects)} / {category.requiredXP}</span>
+                  </div>
+                  <Progress 
+                    key={updateTrigger}
+                    value={(calculateCategoryXP(category.projects) / category.requiredXP) * 100} 
+                    className="h-2 bg-white/10" 
+                    indicatorClassName={cn(
+                      "transition-all duration-500",
+                      calculateCategoryXP(category.projects) >= category.requiredXP
+                        ? "bg-gradient-to-r from-green-700 to-green-300"
+                        : "bg-gradient-to-r from-red-900 to-red-500"
+                    )}
+                  />
                 </div>
-                <Progress 
-                  key={updateTrigger}
-                  value={(calculateCategoryXP(category.projects) / category.requiredXP) * 100} 
-                  className="h-2 bg-white/10" 
-                  indicatorClassName={cn(
-                    "transition-all duration-500",
-                    calculateCategoryXP(category.projects) >= category.requiredXP
-                      ? "bg-gradient-to-r from-green-700 to-green-300"
-                      : "bg-gradient-to-r from-red-900 to-red-500"
-                  )}
-                />
-              </div>
 
-              {/* Liste des projets */}
-              <div className="space-y-2">
-                {category.projects.map(project => (
-                  <Card key={project.id} className={`border-white/10 ${
-                    isProjectCompleted(project.id) ? 'bg-emerald-900/20' : 'bg-zinc-900/50'
-                  }`}>
-                    <CardContent className="p-4">
-                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                        <div className="w-full sm:w-auto">
-                          <p className="text-sm font-medium text-white">{project.name}</p>
-                          <p className="text-xs text-gray-400">{project.xp} XP</p>
+                {/* Liste des projets */}
+                <div className="space-y-2">
+                  {category.projects.map((project: any) => (
+                    <Card key={project.id} className={`border-white/10 ${
+                      isProjectCompleted(project.id) ? 'bg-emerald-900/20' : 'bg-zinc-900/50'
+                    }`}>
+                      <CardContent className="p-4">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                          <div className="w-full sm:w-auto">
+                            <p className="text-sm font-medium text-white">{project.name}</p>
+                            <p className="text-xs text-gray-400">{project.xp} XP</p>
+                          </div>
+                          <div className="flex items-center gap-2 w-full sm:w-auto">
+                            <Input
+                              type="number"
+                              min="0"
+                              max="125"
+                              value={getProjectMark(project.id)}
+                              onChange={(e) => handleMarkChange(project.id, Number(e.target.value))}
+                              className="w-full sm:w-20 h-8 text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            />
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 w-full sm:w-auto">
-                          <Input
-                            type="number"
-                            min="0"
-                            max="125"
-                            value={getProjectMark(project.id)}
-                            onChange={(e) => handleMarkChange(project.id, Number(e.target.value))}
-                            className="w-full sm:w-20 h-8 text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                          />
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <p>Aucune catégorie disponible.</p> // Message ou composant à afficher si aucune catégorie n'est disponible
+        )}
       </div>
     </div>
     </ProtectedRoute>

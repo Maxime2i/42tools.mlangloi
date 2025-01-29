@@ -1,31 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { useUserStore } from '@/store/userStore'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { LogOut } from 'lucide-react'
-
-
-interface UserInfo {
-  login: string
-  email: string
-  usual_full_name: string
-  image: {
-    link: string
-  }
-  campus: Array<{
-    name: string
-  }>
-  pool_month: string
-  pool_year: string
-}
 
 const translateMonth = (month: string): string => {
   const monthTranslations: { [key: string]: string } = {
@@ -47,6 +31,7 @@ const translateMonth = (month: string): string => {
 
 export default function DashboardPage() {
   const { userInfo, fetchUserInfo } = useUserStore()
+  console.log("userInfo", userInfo)
   const router = useRouter()
 
   useEffect(() => {
@@ -85,7 +70,7 @@ export default function DashboardPage() {
   if (!userInfo) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Chargement...</p>
+        <p>Chargement...&apos;</p>
       </div>
     )
   }
@@ -172,7 +157,7 @@ export default function DashboardPage() {
                       <Badge 
                         variant="outline" 
                         className={`border-white/20 ${
-                          project?.["validated?"] ? 'text-emerald-400' : 'text-red-400'
+                          project?.validated ? 'text-emerald-400' : 'text-red-400'
                         }`}
                       >
                         {project.final_mark}/100
@@ -228,7 +213,7 @@ export default function DashboardPage() {
       </div>
       <div className="mt-16 text-center text-sm text-gray-400">
         <p>
-          Si vous appréciez 42Tools, n'hésitez pas à laisser une ⭐ sur{' '}
+          Si vous appréciez 42Tools, n&apos;hésitez pas à laisser une ⭐ sur{' '}
           <a 
             href="https://github.com/Maxime2i/42tools.mlangloi"
             target="_blank"

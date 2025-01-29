@@ -17,6 +17,7 @@ interface Project {
   mark: number
   hours: number
   group: boolean
+  validated?: boolean
 }
 
 interface UserProject {
@@ -26,7 +27,7 @@ interface UserProject {
     slug: string
   }
   status: string
-  "validated?": boolean
+  validated: boolean
   final_mark: number | null
 }
 
@@ -35,7 +36,7 @@ export default function ProjectsPage() {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [selectedProjects, setSelectedProjects] = useState<Project[]>([])
   const [userProjects, setUserProjects] = useState<UserProject[]>([])
-  const [availableProjects, setAvailableProjects] = useState<Project[]>([
+  const [availableProjects] = useState<Project[]>([
     { id: 'ft_transcendence', name: 'Ft_transcendence', xp: 24360, mark: 0, hours: 245, group: true },
     { id: '42run', name: '42run', xp: 9450, mark: 0, hours: 98, group: false },
     { id: '42sh', name: '42sh', xp: 15750, mark: 0, hours: 294, group: true },
@@ -191,7 +192,7 @@ export default function ProjectsPage() {
     { id: 'ocaml-monoids-monads-3', name: 'OCAML - Monoids and Monads - 3', xp: 3475, mark: 0, hours: 7, group: true },
     { id: 'ocaml-oop-1', name: 'OCAML - Object Oriented Programming - 1', xp: 0, mark: 0, hours: 7, group: true },
     { id: 'ocaml-oop-2', name: 'OCAML - Object Oriented Programming - 2', xp: 2225, mark: 0, hours: 7, group: true },
-    { id: 'ocaml-modules-1', name: 'OCAML - OCaml\'s modules language - 1', xp: 0, mark: 0, hours: 7, group: true },
+    { id: 'ocaml-modules-1', name: 'OCAML - OCaml&apos;s modules language - 1', xp: 0, mark: 0, hours: 7, group: true },
     { id: 'ocaml-pattern-matching-0', name: 'OCAML - Pattern Matching and Data Types - 0', xp: 1500, mark: 0, hours: 7, group: true },
     { id: 'ocaml-recursion-0', name: 'OCAML - Recursion and higher-order functions - 0', xp: 0, mark: 0, hours: 7, group: true },
     { id: 'old-irc', name: 'Old-IRC', xp: 21630, mark: 0, hours: 175, group: true },
@@ -312,7 +313,6 @@ export default function ProjectsPage() {
       setUserLevel(userInfo.cursus_users.find((cursus: any) => 
         cursus.cursus_id === 21
       )?.level || 0)
-      
       setUserProjects(userInfo.projects_users || [])
     }
   }, [userInfo, fetchUserInfo, router])
@@ -324,7 +324,7 @@ export default function ProjectsPage() {
       const isMatch = projectSlug === searchSlug ||
                      projectSlug === `42cursus-${searchSlug}` ||
                      projectSlug.replace('42cursus-', '') === searchSlug
-      return isMatch && p.status === 'finished' && p["validated?"] === true
+      return isMatch && p.status === 'finished' && p.validated === true
     })
   }
 
@@ -492,7 +492,7 @@ export default function ProjectsPage() {
                       ))
                     ) : (
                       <div className="text-center py-4 text-gray-400">
-                        Aucun projet trouvé pour "{searchTerm}"
+                        Aucun projet trouvé pour &quot;{searchTerm}&quot;
                       </div>
                     )}
                   </CardContent>

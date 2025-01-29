@@ -15,7 +15,7 @@ const geistMono = localFont({
   weight: "100 900",
 })
 
-export const generateMetadata = async ({ params, searchParams }): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: { params: { slug: string } }): Promise<Metadata> => {
   const pathname = params?.slug || ''
   
   try {

@@ -1,6 +1,6 @@
 'use client'
 
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu"
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "@/components/ui/navigation-menu"
 import Image from "next/image"
 import { RefreshButton } from '@/components/RefreshButton'
 import { usePathname } from 'next/navigation'
