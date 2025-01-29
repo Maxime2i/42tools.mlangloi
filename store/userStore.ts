@@ -70,11 +70,12 @@ export const useUserStore = create<UserStore>()(
         if (!token) return
 
         try {
-          const response = await fetch('https://api.intra.42.fr/v2/me', {
+          const response = await fetch('/api/proxy', {
+            method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          })
+          });
 
           if (!response.ok) throw new Error('Erreur de récupération des données')
 
@@ -108,11 +109,12 @@ export const useUserStore = create<UserStore>()(
         if (!token) return
 
         try {
-          const response = await fetch('https://api.intra.42.fr/v2/me', {
+          const response = await fetch('/api/proxy', {
+            method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          })
+          });
 
           if (!response.ok) throw new Error('Erreur de récupération des données')
 
