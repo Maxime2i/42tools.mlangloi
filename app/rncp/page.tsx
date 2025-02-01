@@ -63,7 +63,7 @@ export default function RNCPPage() {
   const [professionalExperiences, setProfessionalExperiences] = useState<number>(0);
   const { userInfo, fetchUserInfo } = useUserStore()
   const [updateTrigger, setUpdateTrigger] = useState(0);
-  const [categoryXP, setCategoryXP] = useState(0);
+  const [showSubProjects, setShowSubProjects] = useState<{ [key: string]: boolean }>({}); // État pour gérer l'affichage des sous-projets
 
   const [availableProjects] = useState<Project42[]>([
     { id: 'ft_transcendence', name: 'Ft_transcendence', xp: 24360, mark: 0, hours: 245, group: true },
@@ -163,7 +163,6 @@ export default function RNCPPage() {
     { id: 'ft_traceroute', name: 'ft_traceroute', xp: 4200, mark: 0, hours: 49, group: true },
     { id: 'ft_turing', name: 'ft_turing', xp: 9450, mark: 0, hours: 98, group: true },
     { id: 'ft_vox', name: 'ft_vox', xp: 15750, mark: 0, hours: 147, group: true },
-    { id: 'gbmu', name: 'gbmu', xp: 31500, mark: 0, hours: 420, group: true },
     { id: 'get_next_line', name: 'get_next_line', xp: 882, mark: 0, hours: 70, group: true },
     { id: 'gomoku', name: 'gomoku', xp: 25200, mark: 0, hours: 196, group: true },
     { id: 'guimp', name: 'guimp', xp: 12600, mark: 0, hours: 147, group: true },
@@ -246,9 +245,7 @@ export default function RNCPPage() {
     { id: 'piscine-object-04', name: 'Piscine Object - Module 04 - Design Pattern', xp: 1890, mark: 0, hours: 7, group: true },
     { id: 'piscine-object-05', name: 'Piscine Object - Module 05 - Practical work', xp: 1890, mark: 0, hours: 14, group: true },
     { id: 'piscine-ocaml', name: 'Piscine ocaml', xp: 0, mark: 0, hours: 63, group: true },
-    { id: 'piscine-php-symfony', name: 'Piscine PHP Symfony', xp: 9450, mark: 0, hours: 1440, group: true },
     { id: 'piscine-ror', name: 'Piscine RoR', xp: 0, mark: 0, hours: 63, group: true },
-    { id: 'piscine-ruby-on-rails', name: 'Piscine Ruby on Rails', xp: 9450, mark: 0, hours: 1440, group: true },
     { id: 'piscine-symfony', name: 'Piscine Symfony', xp: 0, mark: 0, hours: 63, group: true },
     { id: 'process-and-memory', name: 'process-and-memory', xp: 9450, mark: 0, hours: 98, group: true },
     { id: 'push_swap', name: 'push_swap', xp: 1855, mark: 0, hours: 60, group: true },
@@ -439,16 +436,15 @@ export default function RNCPPage() {
                 name: 'Projets Suite (1 requis)',
                 requiredProjects: 1,
                 projects: [
-                  { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false },
-                  { id: 'badass', name: 'BADASS', predecessor: 'NetPractice', completed: false },
-                  { id: 'doom_nukem', name: 'DoomNukem', predecessor: 'cub3d', completed: false },
-                  { id: 'inception_of_things', name: 'Inception Of Things', predecessor: 'inception', completed: false },
-                  { id: 'human_gl', name: 'HumanGL', predecessor: 'scop', completed: false },
-                  { id: 'kfs_2', name: 'kfs-2', predecessor: 'kfs-1', completed: false },
-                  { id: 'override', name: 'Override', predecessor: 'rainfall', completed: false },
-                  { id: 'pestilence', name: 'Pestilence', predecessor: 'famine', completed: false },
-                  { id: 'rt', name: 'RT', predecessor: 'miniRT', completed: false },
-                  { id: 'total_perspective_vortex', name: 'Total perspective vortex', predecessor: 'dslr', completed: false }
+                  { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false, xp: 15750 },
+                  { id: 'doom_nukem', name: 'DoomNukem', predecessor: 'cub3d', completed: false, xp: 15750 },
+                  { id: 'inception_of_things', name: 'Inception Of Things', predecessor: 'inception', completed: false, xp: 25450 },
+                  { id: 'human_gl', name: 'HumanGL', predecessor: 'scop', completed: false, xp: 4200 },
+                  { id: 'kfs_2', name: 'kfs-2', predecessor: 'kfs-1', completed: false, xp: 15750 },
+                  { id: 'override', name: 'Override', predecessor: 'rainfall', completed: false, xp: 35700 },
+                  { id: 'pestilence', name: 'Pestilence', predecessor: 'famine', completed: false, xp: 15750 },
+                  { id: 'rt', name: 'RT', predecessor: 'miniRT', completed: false, xp: 20750 },
+                  { id: 'total_perspective_vortex', name: 'Total perspective vortex', predecessor: 'dslr', completed: false, xp: 9450 }
                 ]
               },
             web: {
@@ -456,9 +452,6 @@ export default function RNCPPage() {
               requiredXP: 15000,
               requiredProjects: 2,
               projects: [
-                { id: 'piscine_php_symfony', name: 'Piscine PHP Symfony', xp: 0, completed: false },
-                { id: 'piscine_python_django', name: 'Piscine Python Django', xp: 0, completed: false },
-                { id: 'piscine_ruby_rails', name: 'Piscine Ruby on Rails', xp: 0, completed: false },
                 { id: 'camagru', name: 'Camagru', xp: 4200, completed: false },
                 { id: 'matcha', name: 'Matcha', xp: 9450, completed: false },
                 { id: 'hypertube', name: 'Hypertube', xp: 15750, completed: false },
@@ -495,16 +488,15 @@ export default function RNCPPage() {
                 name: 'Projets Suite (1 requis)',
                 requiredProjects: 1,
                 projects: [
-                  { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false },
-                  { id: 'badass', name: 'BADASS', predecessor: 'NetPractice', completed: false },
-                  { id: 'doom_nukem', name: 'DoomNukem', predecessor: 'cub3d', completed: false },
-                  { id: 'inception_of_things', name: 'Inception Of Things', predecessor: 'inception', completed: false },
-                  { id: 'human_gl', name: 'HumanGL', predecessor: 'scop', completed: false },
-                  { id: 'kfs_2', name: 'kfs-2', predecessor: 'kfs-1', completed: false },
-                  { id: 'override', name: 'Override', predecessor: 'rainfall', completed: false },
-                  { id: 'pestilence', name: 'Pestilence', predecessor: 'famine', completed: false },
-                  { id: 'rt', name: 'RT', predecessor: 'miniRT', completed: false },
-                  { id: 'total_perspective_vortex', name: 'Total perspective vortex', predecessor: 'dslr', completed: false }
+                  { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false, xp: 15750 },
+                  { id: 'doom_nukem', name: 'DoomNukem', predecessor: 'cub3d', completed: false, xp: 15750 },
+                  { id: 'inception_of_things', name: 'Inception Of Things', predecessor: 'inception', completed: false, xp: 25450 },
+                  { id: 'human_gl', name: 'HumanGL', predecessor: 'scop', completed: false, xp: 4200 },
+                  { id: 'kfs_2', name: 'kfs-2', predecessor: 'kfs-1', completed: false, xp: 15750 },
+                  { id: 'override', name: 'Override', predecessor: 'rainfall', completed: false, xp: 35700 },
+                  { id: 'pestilence', name: 'Pestilence', predecessor: 'famine', completed: false, xp: 15750 },
+                  { id: 'rt', name: 'RT', predecessor: 'miniRT', completed: false, xp: 20750 },
+                  { id: 'total_perspective_vortex', name: 'Total perspective vortex', predecessor: 'dslr', completed: false, xp: 9450 }
                 ]
               },
             oop: {
@@ -517,7 +509,14 @@ export default function RNCPPage() {
                 { id: 'avaj_launcher', name: 'Avaj launcher', xp: 2000, completed: false },
                 { id: 'swingy', name: 'Swingy', xp: 2000, completed: false },
                 { id: 'fix_me', name: 'fix-me', xp: 2000, completed: false },
-                { id: 'piscine_object', name: 'Piscine Object', xp: 3000, completed: false }
+                { id: 'piscine_object', name: 'Piscine Object', xp: 3000, completed: false, subProjects: [
+                  { id: 'piscine_object_0', name: 'Piscine Object - Module 00 - Encapsulation', xp: 945, completed: false },
+                  { id: 'piscine_object_1', name: 'Piscine Object - Module 01 - Relationship', xp: 945, completed: false },
+                  { id: 'piscine_object_2', name: 'Piscine Object - Module 02 - UML', xp: 1890, completed: false },
+                  { id: 'piscine_object_3', name: 'Piscine Object - Module 03 - SOLID', xp: 1890, completed: false },
+                  { id: 'piscine_object_4', name: 'Piscine Object - Module 04 - Design Pattern', xp: 1890, completed: false },
+                  { id: 'piscine_object_5', name: 'Piscine Object - Module 05 - Practical work', xp: 1890, completed: false },
+                ] }
               ]
             },
             functional: {
@@ -525,7 +524,12 @@ export default function RNCPPage() {
               requiredXP: 10000,
               requiredProjects: 2,
               projects: [
-                { id: 'piscine_ocaml', name: 'Piscine OCaml', xp: 0, completed: false },
+                { id: 'piscine_ocaml', name: 'Piscine OCaml', xp: 0, completed: false, subProjects: [
+                  { id: 'ocaml_pattern_matching_data_types', name: 'OCAML - Pattern Matching and Data Types - 0', xp: 1500, completed: false },
+                  { id: 'ocaml_functor', name: 'OCAML - Functor - 1', xp: 2250, completed: false },
+                  { id: 'ocaml_object_oriented_programming', name: 'OCAML - Object Oriented Programming - 2', xp: 2225, completed: false },
+                  { id: 'ocaml_monoids_and_monads', name: 'OCAML - Monoids and Monads - 3', xp: 3475, completed: false },
+                ] },
                 { id: 'ft_turing', name: 'ft_turing', xp: 9450, completed: false },
                 { id: 'ft_ality', name: 'ft_ality', xp: 4200, completed: false },
                 { id: 'h42n42', name: 'h42n42', xp: 9450, completed: false }
@@ -538,7 +542,6 @@ export default function RNCPPage() {
               projects: [
                 { id: 'libasm', name: 'libasm', xp: 966, completed: false },
                 { id: 'zappy', name: 'zappy', xp: 25200, completed: false },
-                { id: 'gbmu', name: 'gbmu', xp: 0, completed: false },
                 { id: 'ft_linux', name: 'ft_linux', xp: 4200, completed: false },
                 { id: 'little_penguin', name: 'little penguin', xp: 9450, completed: false },
                 { id: 'taskmaster', name: 'taskmaster', xp: 9450, completed: false },
@@ -584,16 +587,15 @@ export default function RNCPPage() {
                 name: 'Projets Suite (1 requis)',
                 requiredProjects: 1,
                 projects: [
-                  { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false },
-                  { id: 'badass', name: 'BADASS', predecessor: 'NetPractice', completed: false },
-                  { id: 'doom_nukem', name: 'DoomNukem', predecessor: 'cub3d', completed: false },
-                  { id: 'inception_of_things', name: 'Inception Of Things', predecessor: 'inception', completed: false },
-                  { id: 'human_gl', name: 'HumanGL', predecessor: 'scop', completed: false },
-                  { id: 'kfs_2', name: 'kfs-2', predecessor: 'kfs-1', completed: false },
-                  { id: 'override', name: 'Override', predecessor: 'rainfall', completed: false },
-                  { id: 'pestilence', name: 'Pestilence', predecessor: 'famine', completed: false },
-                  { id: 'rt', name: 'RT', predecessor: 'miniRT', completed: false },
-                  { id: 'total_perspective_vortex', name: 'Total perspective vortex', predecessor: 'dslr', completed: false }
+                  { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false, xp: 15750 },
+                  { id: 'doom_nukem', name: 'DoomNukem', predecessor: 'cub3d', completed: false, xp: 15750 },
+                  { id: 'inception_of_things', name: 'Inception Of Things', predecessor: 'inception', completed: false, xp: 25450 },
+                  { id: 'human_gl', name: 'HumanGL', predecessor: 'scop', completed: false, xp: 4200 },
+                  { id: 'kfs_2', name: 'kfs-2', predecessor: 'kfs-1', completed: false, xp: 15750 },
+                  { id: 'override', name: 'Override', predecessor: 'rainfall', completed: false, xp: 35700 },
+                  { id: 'pestilence', name: 'Pestilence', predecessor: 'famine', completed: false, xp: 15750 },
+                  { id: 'rt', name: 'RT', predecessor: 'miniRT', completed: false, xp: 20750 },
+                  { id: 'total_perspective_vortex', name: 'Total perspective vortex', predecessor: 'dslr', completed: false, xp: 9450 }
                 ]
               },
             unix: {
@@ -603,7 +605,6 @@ export default function RNCPPage() {
               projects: [
                 { id: 'libasm', name: 'LibASM', xp: 966, completed: false },
                 { id: 'zappy', name: 'Zappy', xp: 25200, completed: false },
-                { id: 'gbmu', name: 'GBMU', xp: 0, completed: false },
                 { id: 'ft_linux', name: 'ft_linux', xp: 4200, completed: false },
                 { id: 'little_penguin', name: 'Little Penguin', xp: 9450, completed: false },
                 { id: 'taskmaster', name: 'Taskmaster', xp: 9450, completed: false },
@@ -630,16 +631,11 @@ export default function RNCPPage() {
               requiredProjects: 3,
               projects: [
                 { id: 'cloud1', name: 'Cloud-1', xp: 9450, completed: false },
-                { id: 'badass', name: 'BADASS', xp: 0, predecessor: 'netpractice', completed: false },
                 { id: 'inception_of_things', name: 'Inception Of Things', xp: 25450, predecessor: 'inception', completed: false },
                 { id: 'taskmaster', name: 'Taskmaster', xp: 9450, completed: false },
                 { id: 'ft_ping', name: 'ft_ping', xp: 4200, completed: false },
                 { id: 'ft_traceroute', name: 'ft_traceroute', xp: 4200, completed: false },
                 { id: 'ft_nmap', name: 'ft_nmap', xp: 15750, completed: false },
-                { id: 'active_directory', name: 'Active Directory', xp: 0, completed: false },
-                { id: 'automatic_directory', name: 'Automatic Directory', xp: 0, completed: false },
-                { id: 'administrative_directory', name: 'Administrative Directory', xp: 0, completed: false },
-                { id: 'accessible_directory', name: 'Accessible Directory', xp: 0, completed: false }
               ]
             },
             security: {
@@ -658,11 +654,17 @@ export default function RNCPPage() {
                 { id: 'woody_woodpacker', name: 'Woody Woodpacker', xp: 9450, completed: false },
                 { id: 'famine', name: 'Famine', xp: 9450, completed: false },
                 { id: 'pestilence', name: 'Pestilence', xp: 15750, completed: false },
-                { id: 'piscine_cybersecurity', name: 'Piscine Cybersecurity', xp: 0, completed: false },
+                { id: 'piscine_cybersecurity', name: 'Piscine Cybersecurity', xp: 0, completed: false, subProjects: [
+                  { id: 'cybersecurity_arachnida_web', name: 'Cybersecurity - arachnida - Web', xp: 1350, completed: false },
+                  { id: 'cybersecurity_ft_onion_web', name: 'Cybersecurity - ft_onion - Web', xp: 1350, completed: false },
+                  { id: 'cybersecurity_ft_otp_otp', name: 'Cybersecurity - ft_otp - OTP', xp: 1350, completed: false },
+                  { id: 'cybersecurity_inquisitor_network', name: 'Cybersecurity - Inquisitor - Network', xp: 1350, completed: false },
+                  { id: 'cybersecurity_reverse_me_rev', name: 'Cybersecurity - Reverse me - Rev', xp: 1350, completed: false },
+                  { id: 'cybersecurity_stockholm_malware', name: 'Cybersecurity - Stockholm - Malware', xp: 1350, completed: false },
+                  { id: 'cybersecurity_vaccine_web', name: 'Cybersecurity - Vaccine - Web', xp: 1350, completed: false },
+                  { id: 'cybersecurity_iron_dome_malware', name: '(Optional) Cybersecurity - Iron Dome - Malware', xp: 0, completed: false },
+                ] },
                 { id: 'unleashthebox', name: 'UnleashTheBox', xp: 15750, completed: false },
-                { id: 'active_connect', name: 'Active Connect', xp: 0, completed: false },
-                { id: 'microforensx', name: 'MicroForensX', xp: 0, completed: false },
-                { id: 'activetechtales', name: 'ActiveTechTales', xp: 0, completed: false }
               ]
             }
           }
@@ -674,16 +676,15 @@ export default function RNCPPage() {
                 name: 'Projets Suite (1 requis)',
                 requiredProjects: 1,
                 projects: [
-                  { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false },
-                  { id: 'badass', name: 'BADASS', predecessor: 'NetPractice', completed: false },
-                  { id: 'doom_nukem', name: 'DoomNukem', predecessor: 'cub3d', completed: false },
-                  { id: 'inception_of_things', name: 'Inception Of Things', predecessor: 'inception', completed: false },
-                  { id: 'human_gl', name: 'HumanGL', predecessor: 'scop', completed: false },
-                  { id: 'kfs_2', name: 'kfs-2', predecessor: 'kfs-1', completed: false },
-                  { id: 'override', name: 'Override', predecessor: 'rainfall', completed: false },
-                  { id: 'pestilence', name: 'Pestilence', predecessor: 'famine', completed: false },
-                  { id: 'rt', name: 'RT', predecessor: 'miniRT', completed: false },
-                  { id: 'total_perspective_vortex', name: 'Total perspective vortex', predecessor: 'dslr', completed: false }
+                  { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false, xp: 15750 },
+                  { id: 'doom_nukem', name: 'DoomNukem', predecessor: 'cub3d', completed: false, xp: 15750 },
+                  { id: 'inception_of_things', name: 'Inception Of Things', predecessor: 'inception', completed: false, xp: 25450 },
+                  { id: 'human_gl', name: 'HumanGL', predecessor: 'scop', completed: false, xp: 4200 },
+                  { id: 'kfs_2', name: 'kfs-2', predecessor: 'kfs-1', completed: false, xp: 15750 },
+                  { id: 'override', name: 'Override', predecessor: 'rainfall', completed: false, xp: 35700 },
+                  { id: 'pestilence', name: 'Pestilence', predecessor: 'famine', completed: false, xp: 15750 },
+                  { id: 'rt', name: 'RT', predecessor: 'miniRT', completed: false, xp: 20750 },
+                  { id: 'total_perspective_vortex', name: 'Total perspective vortex', predecessor: 'dslr', completed: false, xp: 9450 }
                 ]
               },
             web: {
@@ -691,9 +692,6 @@ export default function RNCPPage() {
               requiredXP: 50000,
               requiredProjects: 2,
               projects: [
-                { id: 'piscine_php_symfony', name: 'Piscine PHP Symfony', xp: 0, completed: false },
-                { id: 'piscine_python_django', name: 'Piscine Python Django', xp: 0, completed: false },
-                { id: 'piscine_ruby_rails', name: 'Piscine Ruby on Rails', xp: 0, completed: false },
                 { id: 'camagru', name: 'Camagru', xp: 4200, completed: false },
                 { id: 'matcha', name: 'Matcha', xp: 9450, completed: false },
                 { id: 'hypertube', name: 'Hypertube', xp: 15750, completed: false },
@@ -708,7 +706,6 @@ export default function RNCPPage() {
               requiredXP: 70000,
               requiredProjects: 3,
               projects: [
-                { id: 'piscine_ml', name: 'Piscine Machine Learning', xp: 0, completed: false },
                 { id: 'linear_regression', name: 'Linear regression', xp: 4200, completed: false },
                 { id: 'dslr', name: 'DSLR', xp: 6000, completed: false },
                 { id: 'multilayer_perceptron', name: 'Multi layer perceptron', xp: 9450, completed: false },
@@ -719,8 +716,20 @@ export default function RNCPPage() {
                 { id: 'matrix', name: 'Matrix', xp: 7000, completed: false },
                 { id: 'ready_set_boole', name: 'Ready set boole', xp: 7000, completed: false },
                 { id: 'leaffliction', name: 'Leaffliction', xp: 15750, completed: false },
-                { id: 'piscine_data_science', name: 'Piscine Data Science', xp: 0, completed: false },
-                { id: 'piscine_python_ds', name: 'Piscine Python for Data Science', xp: 0, completed: false }
+                { id: 'piscine_data_science', name: 'Piscine Data Science', xp: 0, completed: false, subProjects: [
+                  { id: 'data_science_0', name: 'Data Science - 0', xp: 545, completed: false },
+                  { id: 'data_science_1', name: 'Data Science - 1', xp: 545, completed: false },
+                  { id: 'data_science_2', name: 'Data Science - 2', xp: 545, completed: false },
+                  { id: 'data_science_3', name: 'Data Science - 3', xp: 545, completed: false },
+                  { id: 'data_science_4', name: 'Data Science - 4', xp: 2545, completed: false },
+                ] },
+                { id: 'piscine_python_ds', name: 'Piscine Python for Data Science', xp: 0, completed: false, subProjects: [
+                  { id: 'python_0_starting', name: 'Python - 0 - Starting', xp: 545, completed: false },
+                  { id: 'python_1_array', name: 'Python - 1 - Array', xp: 545, completed: false },
+                  { id: 'python_2_data_table', name: 'Python - 2 - DataTable', xp: 545, completed: false },
+                  { id: 'python_3_oop', name: 'Python - 3 - OOP', xp: 545, completed: false },
+                  { id: 'python_4_dod', name: 'Python - 4 - Dod', xp: 2545, completed: false },
+                ] }
               ]
             }
           }
@@ -1048,7 +1057,15 @@ export default function RNCPPage() {
                 {/* Liste des projets */}
                 <div className="space-y-2">
                   {category.projects.map((project: any) => {
-                    const [showSubProjects, setShowSubProjects] = useState(false); 
+                    const isSubProjectVisible = showSubProjects[project.id] || false; // Vérifiez si les sous-projets doivent être affichés
+
+                    const handleToggleSubProjects = () => {
+                      setShowSubProjects(prev => ({
+                        ...prev,
+                        [project.id]: !prev[project.id] // Basculez l'état pour ce projet
+                      }));
+                    };
+
 
                     return (
                       <Card key={project.id} className={`border-white/10 ${
@@ -1058,8 +1075,8 @@ export default function RNCPPage() {
                           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                             <div className="w-full sm:w-auto flex items-center">
                               {project.subProjects && project.subProjects.length > 0 && (
-                                <button onClick={() => setShowSubProjects(!showSubProjects)} className="mr-2">
-                                  {showSubProjects ? '▼' : '►'} 
+                                <button onClick={handleToggleSubProjects} className="mr-2">
+                                  {isSubProjectVisible ? '▼' : '►'} 
                                 </button>
                               )}
                               <p className="text-sm font-medium text-white">{project.name}</p>
@@ -1073,12 +1090,12 @@ export default function RNCPPage() {
                                 max="125"
                                 value={getProjectMark(project.id)}
                                 onChange={(e) => handleMarkChange(project.id, Number(e.target.value))}
-                                className="w-full sm:w-20 h-8 text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                className="w-10 sm:w-10 h-8 text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none p-0"
                               />
                             </div>
                           </div>
-                          {/* Affichage des sous-projets si showSubProjects est vrai */}
-                          {showSubProjects && project.subProjects && project.subProjects.length > 0 && (
+                          {/* Affichage des sous-projets si isSubProjectVisible est vrai */}
+                          {isSubProjectVisible && project.subProjects && project.subProjects.length > 0 && (
                             <div className="mt-2 space-y-2">
                               {project.subProjects.map((subProject: any) => (
                                 <Card key={subProject.id} className="border-white/10 bg-zinc-800/50">
