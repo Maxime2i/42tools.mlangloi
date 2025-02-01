@@ -25,6 +25,7 @@ interface Project42 {
     slug: string
   }
   final_mark?: number
+  subProjects?: any[]
 }
 
 type Project = {
@@ -62,6 +63,7 @@ export default function RNCPPage() {
   const [professionalExperiences, setProfessionalExperiences] = useState<number>(0);
   const { userInfo, fetchUserInfo } = useUserStore()
   const [updateTrigger, setUpdateTrigger] = useState(0);
+  const [categoryXP, setCategoryXP] = useState(0);
 
   const [availableProjects] = useState<Project42[]>([
     { id: 'ft_transcendence', name: 'Ft_transcendence', xp: 24360, mark: 0, hours: 245, group: true },
@@ -474,7 +476,14 @@ export default function RNCPPage() {
                 { id: 'ft_hangouts', name: 'ft_hangouts', xp: 4200, completed: false },
                 { id: 'swifty_companion', name: 'Swifty_companion', xp: 4200, completed: false },
                 { id: 'swifty_proteins', name: 'Swifty_proteins', xp: 15750, completed: false },
-                { id: 'piscine_mobile', name: 'Piscine Mobile', xp: 0, completed: false }
+                { id: 'piscine_mobile', name: 'Piscine Mobile', xp: 0, completed: false, subProjects: [
+                  { id: 'mobile_0', name: 'Basic of the mobile application', completed: false, xp: 500 },
+                  { id: 'mobile_1', name: 'Structure and logic', completed: false, xp: 950 },
+                  { id: 'mobile_2', name: 'API and data', completed: false, xp: 1000 },
+                  { id: 'mobile_3', name: 'Design', completed: false, xp: 2000 },
+                  { id: 'mobile_4', name: 'Auth and dataBase', completed: false, xp: 2000 },
+                  { id: 'mobile_5', name: 'Manage data and display', completed: false, xp: 3000 },
+                ] }
               ]
             }
           }
@@ -771,14 +780,33 @@ export default function RNCPPage() {
   const calculateCategoryXP = (projects: any[]): number => {
     return projects.reduce((total, project) => {
       const mark = getProjectMark(project.id);
+      let projectXP = 0;
+
+      // Calculer l'XP pour le projet principal
       if (mark >= 75) {
-        let xp = project.xp;
+        projectXP = project.xp;
         if (mark > 100) {
           const bonusPercentage = (mark - 100) / 100;
-          xp += project.xp * bonusPercentage;
+          projectXP += project.xp * bonusPercentage;
         }
-        return total + xp;
+        total += projectXP;
       }
+
+      // Calculer l'XP pour les sous-projets
+      if (project.subProjects) {
+        project.subProjects.forEach((subProject: any) => {
+          const subMark = getProjectMark(subProject.id);
+          if (subMark >= 75) {
+            let subXP = subProject.xp;
+            if (subMark > 100) {
+              const bonusPercentage = (subMark - 100) / 100;
+              subXP += subProject.xp * bonusPercentage;
+            }
+            total += subXP;
+          }
+        });
+      }
+
       return total;
     }, 0);
   };
@@ -1019,30 +1047,68 @@ export default function RNCPPage() {
 
                 {/* Liste des projets */}
                 <div className="space-y-2">
-                  {category.projects.map((project: any) => (
-                    <Card key={project.id} className={`border-white/10 ${
-                      isProjectCompleted(project.id) ? 'bg-emerald-900/20' : 'bg-zinc-900/50'
-                    }`}>
-                      <CardContent className="p-4">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                          <div className="w-full sm:w-auto">
-                            <p className="text-sm font-medium text-white">{project.name}</p>
-                            <p className="text-xs text-gray-400">{project.xp} XP</p>
+                  {category.projects.map((project: any) => {
+                    const [showSubProjects, setShowSubProjects] = useState(false); 
+
+                    return (
+                      <Card key={project.id} className={`border-white/10 ${
+                        isProjectCompleted(project.id) ? 'bg-emerald-900/30' : 'bg-zinc-900/60'
+                      }`}>
+                        <CardContent className="p-4">
+                          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <div className="w-full sm:w-auto flex items-center">
+                              {project.subProjects && project.subProjects.length > 0 && (
+                                <button onClick={() => setShowSubProjects(!showSubProjects)} className="mr-2">
+                                  {showSubProjects ? '▼' : '►'} 
+                                </button>
+                              )}
+                              <p className="text-sm font-medium text-white">{project.name}</p>
+                              {project.xp ? <p className="text-xs text-gray-400 ml-2">- {project.xp} XP</p> : null}
+                         
+                            </div>
+                            <div className="flex items-center gap-2 w-full sm:w-auto">
+                              <Input
+                                type="number"
+                                min="0"
+                                max="125"
+                                value={getProjectMark(project.id)}
+                                onChange={(e) => handleMarkChange(project.id, Number(e.target.value))}
+                                className="w-full sm:w-20 h-8 text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              />
+                            </div>
                           </div>
-                          <div className="flex items-center gap-2 w-full sm:w-auto">
-                            <Input
-                              type="number"
-                              min="0"
-                              max="125"
-                              value={getProjectMark(project.id)}
-                              onChange={(e) => handleMarkChange(project.id, Number(e.target.value))}
-                              className="w-full sm:w-20 h-8 text-right text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            />
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                          {/* Affichage des sous-projets si showSubProjects est vrai */}
+                          {showSubProjects && project.subProjects && project.subProjects.length > 0 && (
+                            <div className="mt-2 space-y-2">
+                              {project.subProjects.map((subProject: any) => (
+                                <Card key={subProject.id} className="border-white/10 bg-zinc-800/50">
+                                  <CardContent className="p-2">
+                                    <div className="flex items-center justify-between">
+                                      <div className="">
+                                        <p className="text-sm font-medium text-white">{subProject.name}</p>
+                                        <p className="text-xs text-gray-400 ml-2">- {subProject.xp} XP</p>
+                                      </div>
+                                      <Input
+                                        type="number"
+                                        min="0"
+                                        max="125"
+                                        value={getProjectMark(subProject.id)} // Assurez-vous d'avoir une fonction pour obtenir la note du sous-projet
+                                        onChange={(e) => {
+                                          const newMark = Number(e.target.value);
+                                          handleMarkChange(subProject.id, newMark); // Gérer le changement de note
+                                        }}
+                                        className="w-15 h-8 text-right text-sm mt-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                      />
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>

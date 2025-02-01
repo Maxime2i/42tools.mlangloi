@@ -70,7 +70,7 @@ export function Header() {
           <div className="hidden sm:block mt-4 md:mt-0">
             <RefreshButton />
           </div>
-          <div>
+          <div className="md:hidden">
             <h1 className="text-white text-2xl font-semibold">{getPageName(pathname)}</h1>
           </div>
           <div className="flex justify-end sm:hidden">
