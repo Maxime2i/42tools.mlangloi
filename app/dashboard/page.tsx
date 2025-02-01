@@ -70,7 +70,7 @@ export default function DashboardPage() {
   if (!userInfo) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Chargement...&apos;</p>
+        <div className="w-16 h-16 border-4 border-t-transparent border-white rounded-full animate-spin"></div>
       </div>
     )
   }
