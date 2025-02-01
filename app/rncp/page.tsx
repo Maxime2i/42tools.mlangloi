@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import ProtectedRoute from '@/components/ProtectedRoute'
-import { availableProjects, titles } from './data'
+import { groupProjects, titles } from './data'
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { Carousel, CarouselItem, CarouselContent, CarouselPrevious, CarouselNext } from "@/components/ui/carousel"
 
@@ -62,7 +62,7 @@ export default function RNCPPage() {
   const [simulatedMarks, setSimulatedMarks] = useState<{[key: string]: number}>({});
   const [pedagogicalEvents, setPedagogicalEvents] = useState<number>(0);
   const [userLevel, setUserLevel] = useState<number>(0);
-  const [groupProjects, setGroupProjects] = useState<number>(0);
+  const [groupProjectsNumber, setGroupProjectsNumber] = useState<number>(0);
   const [professionalExperiences, setProfessionalExperiences] = useState<number>(0);
   const { userInfo, fetchUserInfo } = useUserStore()
   const [updateTrigger, setUpdateTrigger] = useState(0);
@@ -109,7 +109,7 @@ export default function RNCPPage() {
         );
 
         const groupProjectsCount = validatedProjects.reduce((count, userProject) => {
-          const projectInList = availableProjects.find(p => {
+          const projectInList = groupProjects.find(p => {
             const normalizedUserSlug = userProject.project.slug.toLowerCase()
               .replace('42cursus-', '')
               .replace(/[-_]/g, '');
@@ -118,10 +118,10 @@ export default function RNCPPage() {
             return normalizedUserSlug === normalizedListSlug;
           });
 
-          return projectInList?.group ? count + 1 : count;
+          return projectInList ? count + 1 : count;
         }, 0);
 
-        setGroupProjects(groupProjectsCount);
+        setGroupProjectsNumber(groupProjectsCount);
       }
 
       if (userInfo.events) {
@@ -154,7 +154,7 @@ export default function RNCPPage() {
         setProfessionalExperiences(professionalProjectsCount + internshipsCount);
       }
     }
-  }, [userInfo, availableProjects]);
+  }, [userInfo, groupProjects]);
 
   const isProjectCompleted = (projectId: string): boolean => {
     const project = userProjects.find(p => {
@@ -423,8 +423,8 @@ export default function RNCPPage() {
           <CardContent className="pt-6">
             <div className="flex flex-col sm:flex-row justify-between items-center">
               <span className="text-gray-400">Projets de groupe</span>
-              <Badge variant={groupProjects >= 2 ? "success" : "destructive"}>
-                {groupProjects} / 2
+              <Badge variant={groupProjectsNumber >= 2 ? "success" : "destructive"}>
+                {groupProjectsNumber} / 2
               </Badge>
             </div>
           </CardContent>
