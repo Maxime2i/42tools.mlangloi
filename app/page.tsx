@@ -86,7 +86,7 @@ export default function LoginPage() {
           Mode invité
         </Link>
         </div>
-        <p className="mt-4 text-gray-400 text-sm absolute bottom-0 left-0 right-0 text-center mb-4">by mlangloi</p>
+        <p className="mt-4 text-gray-400 text-sm absolute bottom-0 left-0 right-0 text-center mb-4">by <a href="https://github.com/Maxime2i" target='_blank' className="hover:text-white transition-colors">mlangloi</a></p>
       </div>
     </PublicRoute>
   )
