@@ -125,7 +125,11 @@ export default function RNCPPage() {
       }
 
       if (userInfo.events) {
-        setPedagogicalEvents(userInfo.events.length)
+        const pedagogicalEventsCount = userInfo.events.filter((event: any) =>
+          event.event.kind !== "extern" &&
+          event.event.kind !== "association"
+        ).length
+        setPedagogicalEvents(pedagogicalEventsCount)
       }
 
       const validProfessionalSlugs = [
@@ -466,16 +470,19 @@ export default function RNCPPage() {
               loop: true,
             }}>
               <CarouselContent>
-                {userInfo?.events.map((event: any) => (
+                {userInfo?.events.filter((event: any) =>
+          event.event.kind !== "extern" &&
+          event.event.kind !== "association"
+        ).map((event: any) => (
                   <CarouselItem key={event.event.id}>
                     <Card className="border-white/10 bg-zinc-800/50 mb-4">
                       <CardContent className="p-4">
                         <h6 className="text-white text-center mb-4">{event.event.name}</h6>
                         <p className="text-white">{event.event.description.substring(0, 200) + "..."}</p>
                         <div className="flex justify-end gap-2 mt-2">
-                          <Badge >{event.event.kind}</Badge>
-                          <Badge>{event.event.location}</Badge>
-                          <Badge>{event.event.begin_at.split('T')[0]}</Badge>
+                          {event.event.kind && <Badge >{event.event.kind}</Badge>}
+                          {event.event.location && <Badge>{event.event.location}</Badge>}
+                          {event.event.begin_at && <Badge>{event.event.begin_at.split('T')[0]}</Badge>}
                         </div>
                       </CardContent>
                     </Card>

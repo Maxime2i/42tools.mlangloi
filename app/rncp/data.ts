@@ -1,7 +1,6 @@
 import { Project42 } from "./page";
 
 export const availableProjects: Project42[] = [
-    { id: 'ft_transcendence', name: 'Ft_transcendence', xp: 24360, mark: 0, hours: 245, group: true },
     { id: '42run', name: '42run', xp: 9450, mark: 0, hours: 98, group: false },
     { id: '42sh', name: '42sh', xp: 15750, mark: 0, hours: 294, group: true },
     { id: 'abstract_data', name: 'Abstract_data', xp: 20084, mark: 0, hours: 290, group: false },
