@@ -66,7 +66,7 @@ export default function LoginPage() {
         <button
           onClick={handleLogin}
           disabled={isLoading}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2"
+          className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2"
         >
           <Image src="/logo.png" alt="42 logo" className="w-6 h-6" width={24} height={24} />
           {isLoading ? 'Connexion en cours...' : 'Se connecter avec 42'}
