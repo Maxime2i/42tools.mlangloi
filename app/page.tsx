@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { UserInfo } from '@/store/userStore'
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -22,7 +23,8 @@ export default function LoginPage() {
     
     const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code&scope=${scope}`
     
-    window.location.href = authUrl
+    // Replace window.location.href with router.push
+    router.push(authUrl)
   }
 
   const handleGuestLogin = () => {
@@ -75,14 +77,14 @@ export default function LoginPage() {
           <Image src="/logo.png" alt="42 logo" className="w-6 h-6 invert text-white" width={24} height={24} />
           {isLoading ? 'Connexion en cours...' : 'Se connecter avec 42'}
         </Button>
-        <a
+        <Link
           onClick={handleGuestLogin}
           href="/accueil"
           className="text-white cursor-pointer underline-animation"
           style={{ width: 'fit-content' }}
         >
           Mode invité
-        </a>
+        </Link>
         </div>
         <p className="mt-4 text-gray-400 text-sm absolute bottom-0 left-0 right-0 text-center mb-4">by mlangloi</p>
       </div>

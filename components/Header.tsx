@@ -5,6 +5,7 @@ import Image from "next/image"
 import { RefreshButton } from '@/components/RefreshButton'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import Link from 'next/link'
 
 export function Header() {
   const pathname = usePathname()
@@ -42,28 +43,25 @@ export function Header() {
                 />
               </NavigationMenuItem>
               <NavigationMenuItem className="hidden sm:block">
-                <NavigationMenuLink 
-                  className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200"
-                  href="/accueil"
-                >
-                  Accueil
-                </NavigationMenuLink>
+                <Link legacyBehavior passHref href="/accueil">
+                  <NavigationMenuLink className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200">
+                    Accueil
+                  </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
               <NavigationMenuItem className="hidden sm:block">
-                <NavigationMenuLink 
-                  className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200"
-                  href="/projects"
-                >
-                  Projects
-                </NavigationMenuLink>
+                <Link legacyBehavior passHref href="/projects">
+                  <NavigationMenuLink className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200">
+                    Projects
+                  </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
               <NavigationMenuItem className="hidden sm:block">
-                <NavigationMenuLink 
-                  className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200"
-                  href="/rncp"
-                >
-                  Titres RNCP
-                </NavigationMenuLink>
+                <Link legacyBehavior passHref href="/rncp">
+                  <NavigationMenuLink className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200">
+                    Titres RNCP
+                  </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
@@ -92,9 +90,9 @@ export function Header() {
       {isMenuOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center h-[100vh]">
             <ul className="mt-2">
-              <li><a href="/accueil" className="block text-white text-4xl text-center">Accueil</a></li>
-              <li><a href="/projects" className="block text-white text-4xl mt-4 text-center">Projects</a></li>
-              <li><a href="/rncp" className="block text-white text-4xl mt-4 text-center">Titres RNCP</a></li>
+              <li><Link href="/accueil" className="block text-white text-4xl text-center">Accueil</Link></li>
+              <li><Link href="/projects" className="block text-white text-4xl mt-4 text-center">Projects</Link></li>
+              <li><Link href="/rncp" className="block text-white text-4xl mt-4 text-center">Titres RNCP</Link></li>
             </ul>
         </div>
       )}
