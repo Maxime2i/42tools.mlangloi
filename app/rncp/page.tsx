@@ -454,7 +454,7 @@ export default function RNCPPage() {
         </Card>
       </div>
 
-      {/* Drawer pour afficher les détails des événements pédagogiques */}
+    {userInfo?.events ?
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <DrawerContent className="bg-zinc-900/50 backdrop-blur flex justify-center items-center">
           <div className="max-w-md w-full">
@@ -488,6 +488,7 @@ export default function RNCPPage() {
           </div>
         </DrawerContent>
       </Drawer>
+    : null}
 
       {/* Catégories de projets */}
       <div className={`grid gap-4 ${
@@ -510,23 +511,46 @@ export default function RNCPPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Stats de la catégorie */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">XP</span>
-                    <span className="text-white">{calculateCategoryXP(category.projects)} / {category.requiredXP}</span>
+                {category.requiredXP ? 
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">XP</span>
+                      <span className="text-white">{calculateCategoryXP(category.projects)} / {category.requiredXP}</span>
+                    </div>
+                    <Progress 
+                      key={updateTrigger}
+                      value={(calculateCategoryXP(category.projects) / category.requiredXP) * 100} 
+                      className="h-2 bg-white/10" 
+                      indicatorClassName={cn(
+                        "transition-all duration-500",
+                        calculateCategoryXP(category.projects) >= category.requiredXP
+                          ? "bg-gradient-to-r from-green-700 to-green-300"
+                          : "bg-gradient-to-r from-red-900 to-red-500"
+                      )}
+                    />
                   </div>
-                  <Progress 
-                    key={updateTrigger}
-                    value={(calculateCategoryXP(category.projects) / category.requiredXP) * 100} 
-                    className="h-2 bg-white/10" 
-                    indicatorClassName={cn(
-                      "transition-all duration-500",
-                      calculateCategoryXP(category.projects) >= category.requiredXP
-                        ? "bg-gradient-to-r from-green-700 to-green-300"
-                        : "bg-gradient-to-r from-red-900 to-red-500"
-                    )}
-                  />
-                </div>
+                : null}
+                 {category.requiredProjects ? 
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Projets validés</span>
+                      <span className="text-white">
+                        {category.projects.filter((project: Project) => isProjectCompleted(project.id)).length} / {category.requiredProjects}
+                      </span>
+                    </div>
+                    <Progress 
+                      key={updateTrigger}
+                      value={(category.projects.filter((project: Project) => isProjectCompleted(project.id)).length / category.requiredProjects) * 100} 
+                      className="h-2 bg-white/10" 
+                      indicatorClassName={cn(
+                        "transition-all duration-500",
+                        category.projects.filter((project: Project) => isProjectCompleted(project.id)).length >= category.requiredProjects
+                          ? "bg-gradient-to-r from-green-700 to-green-300"
+                          : "bg-gradient-to-r from-red-900 to-red-500"
+                      )}
+                    />
+                  </div>
+                : null}
 
                 {/* Liste des projets */}
                 <div className="space-y-2">
