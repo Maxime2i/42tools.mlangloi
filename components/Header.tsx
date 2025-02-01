@@ -20,9 +20,9 @@ export function Header() {
   }
 
   const getPageName = (pathname: string) => {
-    if (pathname === '/dashboard') return 'Dashboard'
+    if (pathname === '/accueil') return 'Accueil'
     if (pathname === '/projects') return 'Projects'
-    if (pathname === '/rncp') return 'Titre RNCP'
+    if (pathname === '/rncp') return 'Titres RNCP'
     return '42'
   }
 
@@ -44,9 +44,9 @@ export function Header() {
               <NavigationMenuItem className="hidden sm:block">
                 <NavigationMenuLink 
                   className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200"
-                  href="/dashboard"
+                  href="/accueil"
                 >
-                  Dashboard
+                  Accueil
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem className="hidden sm:block">
@@ -62,7 +62,7 @@ export function Header() {
                   className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200"
                   href="/rncp"
                 >
-                  Titre RNCP
+                  Titres RNCP
                 </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -92,9 +92,9 @@ export function Header() {
       {isMenuOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center h-[100vh]">
             <ul className="mt-2">
-              <li><a href="/dashboard" className="block text-white text-4xl text-center">Dashboard</a></li>
+              <li><a href="/accueil" className="block text-white text-4xl text-center">Accueil</a></li>
               <li><a href="/projects" className="block text-white text-4xl mt-4 text-center">Projects</a></li>
-              <li><a href="/rncp" className="block text-white text-4xl mt-4 text-center">Titre RNCP</a></li>
+              <li><a href="/rncp" className="block text-white text-4xl mt-4 text-center">Titres RNCP</a></li>
             </ul>
         </div>
       )}

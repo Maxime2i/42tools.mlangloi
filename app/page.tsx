@@ -59,7 +59,7 @@ export default function LoginPage() {
 
     localStorage.setItem('guestMode', 'true')
     setUserInfo(guestUser as unknown as UserInfo)
-    router.push('/dashboard')
+    router.push('/accueil')
   }
 
   return (
@@ -77,6 +77,7 @@ export default function LoginPage() {
         </Button>
         <a
           onClick={handleGuestLogin}
+          href="/accueil"
           className="text-white cursor-pointer underline-animation"
           style={{ width: 'fit-content' }}
         >

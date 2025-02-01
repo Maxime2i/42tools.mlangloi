@@ -9,7 +9,7 @@ export default function PublicRoute({ children }: { children: React.ReactNode })
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken')
     if (accessToken) {
-      router.push('/dashboard')
+      router.push('/accueil')
     }
   }, [router])
 

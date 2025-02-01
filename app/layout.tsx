@@ -25,8 +25,8 @@ export const generateMetadata = async ({ params }: { params: { slug: string } })
     } else if (pathname.includes('projects')) {
       const { metadata } = await import('./projects/metadata')
       return metadata
-    } else if (pathname.includes('dashboard')) {
-      const { metadata } = await import('./dashboard/metadata')
+    } else if (pathname.includes('accueil')) {
+      const { metadata } = await import('./accueil/metadata')
       return metadata
     } else if (pathname.includes('callback')) {
       const { metadata } = await import('./callback/metadata')

@@ -29,7 +29,7 @@ const translateMonth = (month: string): string => {
   return monthTranslations[month.toLowerCase()] || month
 }
 
-export default function DashboardPage() {
+export default function AccueilPage() {
   const { userInfo, fetchUserInfo } = useUserStore()
   const router = useRouter()
 
@@ -78,7 +78,7 @@ export default function DashboardPage() {
     <ProtectedRoute>
     <div className="min-h-screen bg-black text-white p-4 md:p-8 space-y-4 md:space-y-8">
       <h1 className="hidden md:block text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
-        Dashboard
+        Accueil
       </h1>
       
       <Card className="border-white/10 bg-zinc-900/50 backdrop-blur">
