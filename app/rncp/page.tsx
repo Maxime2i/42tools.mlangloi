@@ -804,10 +804,11 @@ export default function RNCPPage() {
   return (
     <ProtectedRoute>
     <div className="min-h-screen bg-black text-white p-4 md:p-8 space-y-4 md:space-y-8">
-      <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
+      <h1 className="hidden md:block text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
         Titres RNCP
       </h1>
 
+      <div className="hidden md:flex flex-col gap-4">
       {/* Les deux titres RNCP */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {Object.entries(titles).map(([titleId, title]) => (
@@ -857,12 +858,84 @@ export default function RNCPPage() {
           ))}
         </div>
       </div>
+      </div>
+
+
+      <div className="md:hidden flex flex-col gap-4">
+      {/* Les deux titres RNCP */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {Object.entries(titles).map(([titleId, title], index) => (
+          index === 0 && (
+            <Card key={titleId} className="border-white/10 bg-zinc-900/50 backdrop-blur">
+              <CardHeader>
+                <CardTitle className="text-2xl font-light tracking-tight text-white">
+                  {title.name}
+                </CardTitle>
+                <p className="text-sm text-gray-400">{title.description}</p>
+              </CardHeader>
+            </Card>
+          )
+        ))}
+      </div>
+
+      {/* Options */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          {Object.entries(titles.rncp6.options).map(([optionId, option]) => (
+            <Button
+              key={`rncp6-${optionId}`}
+              onClick={() => setActiveOption(optionId)}
+              variant={activeOption === optionId ? "secondary" : "default"}
+              className={`flex-1 ${
+                activeOption === optionId 
+                  ? "bg-white text-black hover:bg-gray-200" 
+                  : "bg-transparent text-white border border-white/10 hover:bg-white/10"
+              }`}
+            >
+              {option.name}
+            </Button>
+          ))}
+        </div>
+
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {Object.entries(titles).map(([titleId, title], index) => (
+          index === 1 && (
+            <Card key={titleId} className="border-white/10 bg-zinc-900/50 backdrop-blur">
+              <CardHeader>
+                <CardTitle className="text-2xl font-light tracking-tight text-white">
+                  {title.name}
+                </CardTitle>
+                <p className="text-sm text-gray-400">{title.description}</p>
+              </CardHeader>
+            </Card>
+          )
+        ))}
+      </div>
+        <div className="flex flex-col sm:flex-row gap-4">
+          {Object.entries(titles.rncp7.options).map(([optionId, option]) => (
+            <Button
+              key={`rncp7-${optionId}`}
+              onClick={() => setActiveOption(optionId)}
+              variant={activeOption === optionId ? "secondary" : "default"}
+              className={`flex-1 ${
+                activeOption === optionId 
+                  ? "bg-white text-black hover:bg-gray-200" 
+                  : "bg-transparent text-white border border-white/10 hover:bg-white/10"
+              }`}
+            >
+              {option.name}
+            </Button>
+          ))}
+        </div>
+      </div>
+      </div>
 
       {/* Section de progression */}
       <div className="grid grid-cols-2 gap-4">
         <Card className="border-white/10 bg-zinc-800/50">
           <CardContent className="pt-6">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-center">
               <span className="text-gray-400">Level minimum</span>
               <Badge variant={userLevel >= (activeData?.titleId === 'rncp6' ? 17 : 21) ? "success" : "destructive"}>
                 {userLevel.toFixed(2)} / {activeData?.titleId === 'rncp6' ? '17' : '21'}
@@ -873,7 +946,7 @@ export default function RNCPPage() {
 
         <Card className="border-white/10 bg-zinc-800/50">
           <CardContent className="pt-6">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-center">
               <span className="text-gray-400">Projets de groupe</span>
               <Badge variant={groupProjects >= 2 ? "success" : "destructive"}>
                 {groupProjects} / 2
@@ -884,7 +957,7 @@ export default function RNCPPage() {
 
         <Card className="border-white/10 bg-zinc-800/50">
           <CardContent className="pt-6">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-center">
               <span className="text-gray-400">Événements pédagogiques</span>
               <Badge variant={pedagogicalEvents >= (activeData?.titleId === 'rncp6' ? 10 : 15) ? "success" : "destructive"}>
                 {pedagogicalEvents} / {activeData?.titleId === 'rncp6' ? '10' : '15'}
@@ -895,7 +968,7 @@ export default function RNCPPage() {
 
         <Card className="border-white/10 bg-zinc-800/50">
           <CardContent className="pt-6">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-center">
               <span className="text-gray-400">Expériences professionnelles</span>
               <Badge variant={professionalExperiences >= 2 ? "success" : "destructive"}>
                 {professionalExperiences} / 2

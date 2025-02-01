@@ -6,6 +6,8 @@ import { useUserStore } from '@/store/userStore'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { UserInfo } from '@/store/userStore'
+import { Button } from '@/components/ui/button'
+
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -62,22 +64,26 @@ export default function LoginPage() {
 
   return (
     <PublicRoute>
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <button
+      <div className="min-h-screen flex flex-col items-center justify-center gap-8">
+        <h1 className="text-6xl font-bold text-white">42tools</h1>
+        <div className="flex flex-col gap-6 items-center">
+        <Button
           onClick={handleLogin}
           disabled={isLoading}
-          className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2"
+          className="bg-black border border-white hover:bg-white-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2 transition duration-500 ease-in-out hover:scale-110"
         >
-          <Image src="/logo.png" alt="42 logo" className="w-6 h-6" width={24} height={24} />
+          <Image src="/logo.png" alt="42 logo" className="w-6 h-6 invert text-white" width={24} height={24} />
           {isLoading ? 'Connexion en cours...' : 'Se connecter avec 42'}
-        </button>
-
-        <button
+        </Button>
+        <a
           onClick={handleGuestLogin}
-          className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2"
+          className="text-white cursor-pointer underline-animation"
+          style={{ width: 'fit-content' }}
         >
           Mode invité
-        </button>
+        </a>
+        </div>
+        <p className="mt-4 text-gray-400 text-sm absolute bottom-0 left-0 right-0 text-center mb-4">by mlangloi</p>
       </div>
     </PublicRoute>
   )

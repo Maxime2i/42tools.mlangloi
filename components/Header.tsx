@@ -19,6 +19,13 @@ export function Header() {
     return null
   }
 
+  const getPageName = (pathname: string) => {
+    if (pathname === '/dashboard') return 'Dashboard'
+    if (pathname === '/projects') return 'Projects'
+    if (pathname === '/rncp') return 'Titre RNCP'
+    return '42'
+  }
+
   return (
     <header className="border-b border-white/10 bg-black/80 backdrop-blur-xl supports-[backdrop-filter]:bg-black/60 sticky top-0 z-50">
       <div className="container mx-auto px-4">
@@ -62,6 +69,9 @@ export function Header() {
           </NavigationMenu>
           <div className="hidden sm:block mt-4 md:mt-0">
             <RefreshButton />
+          </div>
+          <div>
+            <h1 className="text-white text-2xl font-semibold">{getPageName(pathname)}</h1>
           </div>
           <div className="flex justify-end sm:hidden">
             <button className="text-gray-400 hover:text-white z-10" onClick={toggleMenu}>
