@@ -31,7 +31,6 @@ const translateMonth = (month: string): string => {
 
 export default function DashboardPage() {
   const { userInfo, fetchUserInfo } = useUserStore()
-  console.log("userInfo", userInfo)
   const router = useRouter()
 
   useEffect(() => {

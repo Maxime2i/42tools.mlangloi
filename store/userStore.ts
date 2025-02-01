@@ -29,13 +29,29 @@ export interface UserInfo {
     final_mark: number
     marked_at: string
   }>
-  events: Array<{
-    event_type: string
-  }>
   internships: Array<any>
   campus: Array<any>
   pool_month: string
   pool_year: string
+  events: Array<{
+    event: {
+      id: number
+      name: string
+      description: string
+      location: string
+      kind: string
+      max_people: number | null
+      nbr_subscribers: number
+      begin_at: string
+      end_at: string
+      campus_ids: Array<number>
+      cursus_ids: Array<number>
+      created_at: string
+      updated_at: string
+      prohibition_of_cancellation: number | null
+      waitlist: number | null
+    }
+  }>
 }
 
 interface UserStore {
@@ -87,8 +103,6 @@ export const useUserStore = create<UserStore>()(
               validated: project['validated?'],
             }))
           }
-
-          console.log("datav2", data)
 
           set({ userInfo: data, lastUpdate: Date.now() })
         } catch (error) {

@@ -17,9 +17,26 @@
        }
 
        const data = await response.json();
+
+       const response2 = await fetch(`https://api.intra.42.fr/v2/users/${data.id}/events_users`, {
+        method: 'GET',
+        headers: {
+          Authorization: token || '',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'appel à l\'API 42 pour les événements de l\'utilisateur');
+      }
+
+      const events = await response2.json();
+
+
+      data.events = events
        return NextResponse.json(data);
      } catch (error) {
        console.error('Erreur:', error);
        return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
      }
    }
+
