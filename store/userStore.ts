@@ -33,25 +33,27 @@ export interface UserInfo {
   campus: Array<any>
   pool_month: string
   pool_year: string
-  events: Array<{
+  events: Array<Event>
+}
+
+export interface Event {
     event: {
-      id: number
-      name: string
-      description: string
-      location: string
-      kind: string
-      max_people: number | null
-      nbr_subscribers: number
-      begin_at: string
-      end_at: string
-      campus_ids: Array<number>
-      cursus_ids: Array<number>
-      created_at: string
-      updated_at: string
-      prohibition_of_cancellation: number | null
-      waitlist: number | null
+        id: number
+        name: string
+        description: string
+        location: string
+        kind: string
+        max_people: number | null
+        nbr_subscribers: number
+        begin_at: string
+        end_at: string
+        campus_ids: Array<number>
+        cursus_ids: Array<number>
+        created_at: string
+        updated_at: string
+        prohibition_of_cancellation: number | null
+        waitlist: number | null
     }
-  }>
 }
 
 interface UserStore {

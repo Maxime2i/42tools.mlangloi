@@ -10,6 +10,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { useUserStore } from '@/store/userStore'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { LogOut } from 'lucide-react'
+import EventPieChart from '@/components/stats/EventPieChart'
 
 const translateMonth = (month: string): string => {
   const monthTranslations: { [key: string]: string } = {
@@ -195,6 +196,18 @@ export default function AccueilPage() {
                 </div>
               )) || <p className="text-sm text-gray-400">Aucune compétence disponible</p>}
             </div>
+          </CardContent>
+        </Card>
+
+
+        <Card className="border-white/10 bg-zinc-900/50 backdrop-blur">
+          <CardHeader>
+            <CardTitle className="text-2xl font-light tracking-tight text-white">
+              Événements
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <EventPieChart events={userInfo.events} />
           </CardContent>
         </Card>
 
