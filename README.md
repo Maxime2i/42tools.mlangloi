@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 42 Stats & RNCP Simulator
 
-## Getting Started
+Ce projet est un site web développé avec Next.js qui permet aux utilisateurs de se connecter à l'API de l'école 42 ou de naviguer en mode invité sans connexion. L'objectif est de fournir des statistiques détaillées sur le compte utilisateur, de simuler des niveaux futurs en ajoutant des projets potentiels, et de suivre les conditions nécessaires pour valider les titres RNCP associés à l'école 42.
 
-First, run the development server:
+## Fonctionnalités
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 1. **Connexion avec l'API 42**
+   - L'utilisateur peut se connecter à son compte 42 via l'API de l'école.
+   - En mode invité, l'utilisateur peut accéder à une vue limitée des informations sans connexion à un compte.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. **Vue des statistiques utilisateur**
+   - Affichage des statistiques liées à l'avancement de l'utilisateur dans son parcours 42 (projets réalisés, évaluations, etc.).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. **Simulateur de niveau**
+   - Permet à l'utilisateur de simuler son niveau futur en ajoutant des projets potentiels à son parcours.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. **Page RNCP**
+   - Affiche les conditions à remplir pour valider les différents titres RNCP.
+   - Permet à l'utilisateur de suivre sa progression dans la validation de ces titres.
+   - Simule les avancements futurs en fonction des projets ajoutés.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## Fonctionnement de l'API 42
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Le projet se connecte à l'API 42 pour récupérer les informations liées à l'utilisateur connecté, y compris les projets complétés et leur progression. Si l'utilisateur choisit de naviguer en mode invité, aucune donnée personnelle n'est récupérée et la vue est limitée.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Pages
 
-## Deploy on Vercel
+- Page d'accueil : Vue d'ensemble des statistiques de l'utilisateur.
+- Simulateur de niveau : Interface pour ajouter des projets potentiels et simuler le niveau futur.
+- Page RNCP : Affichage des titres RNCP et suivi de la progression de l'utilisateur.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Avenir 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Amélioration de l'interface utilisateur avec un design responsive.
+- Intégration de différentes statistiqsues au tableau de bord.
+- Ajout d'une page campus
