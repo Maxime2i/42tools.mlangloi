@@ -10,9 +10,8 @@ import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { groupProjects, titles } from './data'
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
-import { Carousel, CarouselItem, CarouselContent, CarouselPrevious, CarouselNext } from "@/components/ui/carousel"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectLabel, SelectGroup } from "@/components/ui/select"
+import EventDrawer from '@/components/stats/EventDrawer'
 
 export interface Project42 {
   id?: string
@@ -421,44 +420,16 @@ export default function RNCPPage() {
         </Card>
       </div>
 
-    {userInfo?.events ?
-      <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-        <DrawerContent className="bg-zinc-900/50 backdrop-blur flex justify-center items-center">
-          <div className="max-w-md w-full">
-            <DrawerHeader>
-              <DrawerTitle className="text-white text-center">Détails des événements pédagogiques</DrawerTitle>
-            </DrawerHeader>
-            <Carousel opts={{
-              align: "start",
-              loop: true,
-            }}>
-              <CarouselContent>
-                {userInfo?.events.filter((event: any) =>
+    {userInfo?.events ? (
+      <EventDrawer 
+        isOpen={isDrawerOpen} 
+        onClose={setIsDrawerOpen} 
+        events={userInfo.events.filter((event: any) =>
           event.event.kind !== "extern" &&
           event.event.kind !== "association"
-        ).map((event: any) => (
-                  <CarouselItem key={event.event.id}>
-                    <Card className="border-white/10 bg-zinc-800/50 mb-4">
-                      <CardContent className="p-4">
-                        <h6 className="text-white text-center mb-4">{event.event.name}</h6>
-                        <p className="text-white">{event.event.description.substring(0, 200) + "..."}</p>
-                        <div className="flex justify-end gap-2 mt-2">
-                          {event.event.kind && <Badge >{event.event.kind}</Badge>}
-                          {event.event.location && <Badge>{event.event.location}</Badge>}
-                          {event.event.begin_at && <Badge>{event.event.begin_at.split('T')[0]}</Badge>}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </div>
-        </DrawerContent>
-      </Drawer>
-    : null}
+        )} 
+      />
+    ) : null}
 
       {/* Catégories de projets */}
       <div className={`grid gap-4 ${

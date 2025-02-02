@@ -5,14 +5,14 @@ import {
   ChartConfig,
 } from "@/components/ui/chart";
 import { Label, Pie, PieChart } from "recharts";
-import { useMemo } from "react";
 import { Event } from "@/store/userStore";
 import React from 'react';
-
-
-
+import EventDrawer from '@/components/stats/EventDrawer';
 
 export default function EventPieChart({ events }: { events: Event[] }) {
+    const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+    const [selectedEvents, setSelectedEvents] = React.useState<Event[]>([]);
+
     const chartConfig = {
         pedago: {
           label: "pedago",
@@ -72,7 +72,6 @@ export default function EventPieChart({ events }: { events: Event[] }) {
         },
       } satisfies ChartConfig
 
-
     const eventCounts = events.reduce((acc: Record<string, number>, event: Event) => {
         acc[event.event.kind] = (acc[event.event.kind] || 0) + 1;
         return acc;
@@ -85,58 +84,70 @@ export default function EventPieChart({ events }: { events: Event[] }) {
     }));
     console.log(data);
 
-    
+    const handlePieClick = (data: { kind: string; count: number }) => {
+        const filteredEvents = events.filter(event => event.event.kind === data.kind);
+        setSelectedEvents(filteredEvents);
+        setIsDrawerOpen(true);
+    };
 
+    return (
+        <>
+            <ChartContainer
+                config={chartConfig}
+                className="mx-auto aspect-square max-h-[250px]"
+            >
+                <PieChart>
+                    <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent hideLabel />}
+                    />
+                    <Pie
+                        data={data}
+                        dataKey="count"
+                        nameKey="kind"
+                        innerRadius={60}
+                        strokeWidth={5}
+                        onClick={handlePieClick}
+                    >
+                        <Label
+                            content={({ viewBox }) => {
+                                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                                    return (
+                                        <text
+                                            x={viewBox.cx}
+                                            y={viewBox.cy}
+                                            textAnchor="middle"
+                                            dominantBaseline="middle"
+                                        >
+                                            <tspan
+                                                x={viewBox.cx}
+                                                y={viewBox.cy}
+                                                className="text-3xl font-bold"
+                                                fill="white"
+                                            >
+                                                {events.length}
+                                            </tspan>
+                                            <tspan
+                                                x={viewBox.cx}
+                                                y={(viewBox.cy || 0) + 24}
+                                                className="fill-muted-foreground"
+                                            >
+                                                Événements
+                                            </tspan>
+                                        </text>
+                                    );
+                                }
+                            }}
+                        />
+                    </Pie>
+                </PieChart>
+            </ChartContainer>
 
-  return (
-    <ChartContainer
-      config={chartConfig}
-      className="mx-auto aspect-square max-h-[250px]"
-    >
-      <PieChart>
-        <ChartTooltip
-          cursor={false}
-          content={<ChartTooltipContent hideLabel />}
-        />
-        <Pie
-          data={data}
-          dataKey="count"
-          nameKey="kind"
-          innerRadius={60}
-          strokeWidth={5}
-        >
-          <Label
-            content={({ viewBox }) => {
-              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                return (
-                  <text
-                    x={viewBox.cx}
-                    y={viewBox.cy}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                  >
-                    <tspan
-                      x={viewBox.cx}
-                      y={viewBox.cy}
-                      className="text-3xl font-bold"
-                      fill="white"
-                    >
-                      {events.length}
-                    </tspan>
-                    <tspan
-                      x={viewBox.cx}
-                      y={(viewBox.cy || 0) + 24}
-                      className="fill-muted-foreground"
-                    >
-                      Événements
-                    </tspan>
-                  </text>
-                );
-              }
-            }}
-          />
-        </Pie>
-      </PieChart>
-    </ChartContainer>
-  );
+            <EventDrawer 
+                isOpen={isDrawerOpen} 
+                onClose={setIsDrawerOpen} 
+                events={selectedEvents} 
+            />
+        </>
+    );
 }
