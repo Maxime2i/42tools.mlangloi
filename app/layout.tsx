@@ -49,6 +49,7 @@ export default function RootLayout({
     <html lang="fr">
       <head>
         <link rel="canonical" href="https://42tools.mlangloi.fr" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white min-h-screen`}>
         <Header />
