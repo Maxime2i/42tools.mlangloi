@@ -66,7 +66,7 @@ export default function LoginPage() {
 
   return (
     <PublicRoute>
-      <div className="min-h-screen flex flex-col items-center justify-center gap-8">
+      <div className="min-h-[90vh] flex flex-col items-center justify-center gap-8">
         <h1 className="text-6xl font-bold text-white">42tools</h1>
         <div className="flex flex-col gap-6 items-center">
         <Button

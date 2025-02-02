@@ -16,6 +16,10 @@ export function Header() {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  const closeMenu = () => {
+    setIsMenuOpen(false)
+  }
+
   if (noHeaderRoutes.includes(pathname)) {
     return null
   }
@@ -44,21 +48,21 @@ export function Header() {
               </NavigationMenuItem>
               <NavigationMenuItem className="hidden sm:block">
                 <Link legacyBehavior passHref href="/accueil">
-                  <NavigationMenuLink className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200">
+                  <NavigationMenuLink className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200" onClick={closeMenu}>
                     Accueil
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem className="hidden sm:block">
                 <Link legacyBehavior passHref href="/projects">
-                  <NavigationMenuLink className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200">
+                  <NavigationMenuLink className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200" onClick={closeMenu}>
                     Projects
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem className="hidden sm:block">
                 <Link legacyBehavior passHref href="/rncp">
-                  <NavigationMenuLink className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200">
+                  <NavigationMenuLink className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200" onClick={closeMenu}>
                     Titres RNCP
                   </NavigationMenuLink>
                 </Link>
@@ -89,11 +93,11 @@ export function Header() {
 
       {isMenuOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col justify-center items-center h-[100vh]">
-            <ul className="mt-2">
-              <li><Link href="/accueil" className="block text-white text-4xl text-center">Accueil</Link></li>
-              <li><Link href="/projects" className="block text-white text-4xl mt-4 text-center">Projects</Link></li>
-              <li><Link href="/rncp" className="block text-white text-4xl mt-4 text-center">Titres RNCP</Link></li>
-            </ul>
+          <ul className="mt-2">
+            <li><Link href="/accueil" className="block text-white text-4xl text-center" onClick={closeMenu}>Accueil</Link></li>
+            <li><Link href="/projects" className="block text-white text-4xl mt-4 text-center" onClick={closeMenu}>Projects</Link></li>
+            <li><Link href="/rncp" className="block text-white text-4xl mt-4 text-center" onClick={closeMenu}>Titres RNCP</Link></li>
+          </ul>
         </div>
       )}
     </header>

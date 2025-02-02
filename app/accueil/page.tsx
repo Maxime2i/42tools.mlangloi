@@ -76,7 +76,7 @@ export default function AccueilPage() {
 
   return (
     <ProtectedRoute>
-    <div className="min-h-screen bg-black text-white p-4 md:p-8 space-y-4 md:space-y-8">
+    <div className="min-h-screen bg-black text-white md:p-8 space-y-4 md:space-y-8">
       <h1 className="hidden md:block text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
         Accueil
       </h1>
@@ -137,7 +137,7 @@ export default function AccueilPage() {
                   }
                 </span>
               </div>
-              <Progress value={localStorage.getItem('guestMode') === 'true' ? 0 : 84} className="h-2 bg-white/10" />
+              <Progress value={localStorage.getItem('guestMode') === 'true' ? 0 : 84} className="h-2 bg-white/10" indicatorClassName="bg-gradient-to-r from-green-700 to-green-300" />
             </div>
 
             <div className="space-y-4">
@@ -200,7 +200,7 @@ export default function AccueilPage() {
 
 
       </div>
-      <div className="mt-8 flex justify-center">
+      <div className="pt-10 flex justify-center">
         <Button
           onClick={handleLogout}
           variant="destructive"

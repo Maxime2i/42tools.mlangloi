@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search } from "lucide-react"
+import { Search, Trash } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { useUserStore } from '@/store/userStore'
 import ProtectedRoute from '@/components/ProtectedRoute'
@@ -369,7 +369,7 @@ export default function ProjectsPage() {
 
   return (
     <ProtectedRoute>
-    <div className="min-h-screen bg-black text-white p-4 md:p-8 space-y-4 md:space-y-8">
+    <div className="bg-black text-white md:p-8 space-y-4 md:space-y-8">
       <h1 className="hidden md:block text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-500">
         Simulateur de niveau
       </h1>
@@ -408,29 +408,32 @@ export default function ProjectsPage() {
       <Card className="border-white/10 bg-zinc-900/50 backdrop-blur">
         <CardContent className="pt-6 space-y-4">
           {selectedProjects.map(project => (
-            <div key={project.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border border-white/5 rounded-lg hover:border-white/20 transition-colors space-y-2 md:space-y-0">
+            <div key={project.id} className="flex flex-row justify-between items-start md:items-center p-4 border border-white/5 rounded-lg hover:border-white/20 transition-colors space-y-2 md:space-y-0">
               <div className="flex flex-col">
                 <span className="font-medium text-white">{project.name}</span>
                 <span className="text-sm text-gray-400">XP: {project.xp} - {project.hours}h</span>
               </div>
-              <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4 w-full md:w-auto">
-                <div className="flex items-center gap-2 text-white w-full md:w-auto">
+              <div className="flex flex-row items-start md:items-center gap-2 md:gap-4 w-auto">
+                <div className="flex items-center gap-2 text-white w-auto">
                   <input
                     type="number"
                     min="0"
                     max="125"
                     value={project.mark}
                     onChange={(e) => handleMarkChange(project.id, Number(e.target.value))}
-                    className="w-full md:w-16 text-right px-2 py-1 bg-zinc-800 border border-white/10 rounded text-white"
+                    className="w-15 md:w-16 text-right px-2 py-1 bg-zinc-800 border border-white/10 rounded text-white"
                   />
                   <span>/125</span>
                 </div>
                 <Button
                   onClick={() => handleRemoveProject(project.id)}
                   variant="ghost"
-                  className="text-red-400 hover:text-red-300 hover:bg-red-950/20 w-full md:w-auto"
+                  className="text-red-400 hover:text-red-300 hover:bg-red-950/20 w-auto p-0 pb-2"
                 >
-                  Supprimer
+                  <span className="md:hidden">
+                    <Trash className="w-4 h-4" />
+                  </span>
+                  <span className="hidden md:inline">Supprimer</span>
                 </Button>
               </div>
             </div>

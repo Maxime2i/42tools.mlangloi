@@ -85,7 +85,7 @@ export const groupProjects: Project42[] = [
           name: 'Développement web et mobile',
           categories: {
             suite: {
-                name: 'Projets Suite (1 requis)',
+                name: 'Projets Suite',
                 requiredProjects: 1,
                 projects: [
                   { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false, xp: 15750 },
@@ -137,7 +137,7 @@ export const groupProjects: Project42[] = [
           name: 'Développement applicatif',
           categories: {
             suite: {
-                name: 'Projets Suite (1 requis)',
+                name: 'Projets Suite',
                 requiredProjects: 1,
                 projects: [
                   { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false, xp: 15750 },
@@ -236,7 +236,7 @@ export const groupProjects: Project42[] = [
           name: 'Système d\'information et réseaux',
           categories: {
             suite: {
-                name: 'Projets Suite (1 requis)',
+                name: 'Projets Suite',
                 requiredProjects: 1,
                 projects: [
                   { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false, xp: 15750 },
@@ -325,7 +325,7 @@ export const groupProjects: Project42[] = [
           name: 'Architecture des bases de données et data',
           categories: {
             suite: {
-                name: 'Projets Suite (1 requis)',
+                name: 'Projets Suite',
                 requiredProjects: 1,
                 projects: [
                   { id: '42sh', name: '42sh', predecessor: 'minishell', completed: false, xp: 15750 },
