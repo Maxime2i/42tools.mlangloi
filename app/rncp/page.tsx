@@ -515,7 +515,7 @@ export default function RNCPPage() {
                           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                             <div className="w-full sm:w-auto flex items-center">
                               {project.subProjects && project.subProjects.length > 0 && (
-                                <button onClick={handleToggleSubProjects} className="mr-2">
+                                <button onClick={handleToggleSubProjects} className="mr-2 text-white">
                                   {isSubProjectVisible ? '▼' : '►'} 
                                 </button>
                               )}
