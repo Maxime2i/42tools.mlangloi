@@ -461,7 +461,7 @@ export default function RNCPPage() {
                     </div>
                     <Progress 
                       key={updateTrigger}
-                      value={(calculateCategoryXP(category.projects) / category.requiredXP) * 100} 
+                      value={Math.min((calculateCategoryXP(category.projects) / category.requiredXP) * 100, 100)} 
                       className="h-2 bg-white/10" 
                       indicatorClassName={cn(
                         "transition-all duration-500",
@@ -598,7 +598,7 @@ export default function RNCPPage() {
                       </div>
                       <Progress 
                         key={updateTrigger}
-                        value={(calculateCategoryXP(category.projects) / category.requiredXP) * 100} 
+                        value={Math.min((calculateCategoryXP(category.projects) / category.requiredXP) * 100, 100)} 
                         className="h-2 bg-white/10" 
                         indicatorClassName={cn(
                           "transition-all duration-500",
