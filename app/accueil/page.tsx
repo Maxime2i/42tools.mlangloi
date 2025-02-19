@@ -11,6 +11,7 @@ import { useUserStore } from '@/store/userStore'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { LogOut } from 'lucide-react'
 import EventPieChart from '@/components/stats/EventPieChart'
+import Link from 'next/link'
 
 const translateMonth = (month: string): string => {
   const monthTranslations: { [key: string]: string } = {
@@ -66,6 +67,7 @@ export default function AccueilPage() {
 
     router.push('/')
   }
+  console.log(userInfo)
 
   if (!userInfo) {
     return (
@@ -90,15 +92,25 @@ export default function AccueilPage() {
         </CardHeader>
         <CardContent className="space-y-8 pt-6">
           <div className="space-y-6">
-            <div className="flex items-center gap-4 pb-4 border-b border-white/5 hover:border-white/20 transition-colors">
-              <Avatar className="w-16 h-16">
-                <AvatarImage src={userInfo.image.link} />
-                <AvatarFallback>{userInfo.usual_full_name.charAt(0).toUpperCase()}</AvatarFallback>
-              </Avatar>
-              <div>
+            <div className="flex items-center justify-between pb-4 border-b border-white/5 hover:border-white/20 transition-colors">
+              <div className="flex items-center gap-4">
+                <Link href={`https://profile.intra.42.fr/users/${userInfo.login}`}>
+                  <Avatar className="w-16 h-16">
+                    <AvatarImage src={userInfo.image.link} />
+                    <AvatarFallback>{userInfo.usual_full_name.charAt(0).toUpperCase()}</AvatarFallback>
+                </Avatar>
+                </Link>
+
+              <div className="flex flex-col items-start">
                 <h3 className="font-medium text-white">{userInfo.usual_full_name}</h3>
                 <p className="text-sm text-gray-400">{userInfo.login}</p>
               </div>
+            </div>
+              <div className="flex flex-col items-end">
+                <span className="text-sm text-white">{userInfo.wallet} <span className="text-gray-400">₳</span></span>
+                <span className="text-sm text-white">{userInfo.correction_point} <span className="text-gray-400">{userInfo.correction_point == 1 ? 'point de correction' : 'points de correction'}</span></span>
+              </div>
+
             </div>
             <div className="flex justify-between items-center pb-4 border-b border-white/5 hover:border-white/20 transition-colors">
               <span className="text-gray-400">Email</span>

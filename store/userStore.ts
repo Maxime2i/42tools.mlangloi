@@ -34,6 +34,8 @@ export interface UserInfo {
   pool_month: string
   pool_year: string
   events: Array<Event>
+  wallet: number
+  correction_point: number
 }
 
 export interface Event {

@@ -56,7 +56,8 @@ export default function LoginPage() {
           { id: 10, name: 'Graphics', level: 0 }
         ]
       }],
-      projects_users: []
+      projects_users: [],
+      events: []
     }
 
     localStorage.setItem('guestMode', 'true')
