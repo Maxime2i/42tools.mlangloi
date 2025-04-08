@@ -27,13 +27,23 @@ export default function LoginPage() {
       <div className="min-h-[90vh] flex flex-col items-center justify-center gap-8">
         <h1 className="text-6xl font-bold text-white">42tools</h1>
         <div className="flex flex-col gap-6 items-center">
+        <div className="text-center mb-4">
+          <div className="text-2xl mb-2">🚧 Site en maintenance 🚧</div>
+
+          <div className="text-gray-400 mt-2">
+            Temps estimé : entre 42 secondes et 42 jours
+          </div>
+        </div>
         <Button
           onClick={handleLogin}
-          disabled={isLoading}
-          className="bg-black border border-white hover:bg-white-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2 transition duration-500 ease-in-out hover:scale-110"
+          disabled={true}
+          className="bg-black border border-white text-white font-bold py-2 px-4 rounded flex items-center gap-2 opacity-50 cursor-not-allowed transform rotate-3 hover:rotate-0 transition-all"
         >
-          {/* <Image src="/logo.png" alt="42 logo" className="w-6 h-6 invert text-white" width={24} height={24} /> */}
-          {isLoading ? 'Connexion en cours...' : 'Se connecter avec 42'}
+          {isLoading ? (
+            "Chargement..."
+          ) : (
+            "Connexion en vacances 🏖️"
+          )}
         </Button>
         </div>
         <p className="mt-4 text-gray-400 text-sm absolute bottom-0 left-0 right-0 text-center mb-4">by <a href="https://github.com/Maxime2i" target='_blank' className="hover:text-white transition-colors">mlangloi</a></p>
