@@ -8,7 +8,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 export function RefreshButton() {
   const { canManualRefresh, manualRefresh } = useUserStore()
   const [timeLeft, setTimeLeft] = useState<number>(0)
-  const isGuestMode = typeof window !== 'undefined' && localStorage.getItem('guestMode') === 'true'
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -29,16 +28,14 @@ export function RefreshButton() {
   }, [canManualRefresh])
 
   const handleRefresh = async () => {
-    if (canManualRefresh() && !isGuestMode) {
+    if (canManualRefresh()) {
       await manualRefresh()
     }
   }
 
-  const tooltipContent = isGuestMode 
-    ? 'Pas de données à actualiser en mode invité' 
-    : timeLeft > 0 
-      ? `Disponible dans ${timeLeft} secondes` 
-      : 'Rafraîchir les données'
+  const tooltipContent = timeLeft > 0 
+    ? `Disponible dans ${timeLeft} secondes` 
+    : 'Rafraîchir les données'
 
   return (
     <TooltipProvider>
@@ -46,7 +43,7 @@ export function RefreshButton() {
         <TooltipTrigger asChild>
           <button
             onClick={handleRefresh}
-            disabled={!canManualRefresh() || isGuestMode}
+            disabled={!canManualRefresh()}
             className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <RefreshCw className="w-4 h-4" />

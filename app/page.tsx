@@ -27,44 +27,6 @@ export default function LoginPage() {
     router.push(authUrl)
   }
 
-  const handleGuestLogin = () => {
-    const guestUser = {
-      login: 'guest',
-      email: 'guest@example.com',
-      usual_full_name: 'Utilisateur Invité',
-      image: {
-        link: '/guest-avatar.png'
-      },
-      campus: [{
-        name: 'Campus Invité'
-      }],
-      pool_month: 'january',
-      pool_year: '2025',
-      cursus_users: [{
-        cursus_id: 21,
-        level: 0,
-        skills: [
-          { id: 1, name: 'Algorithms & AI', level: 0 },
-          { id: 2, name: 'Rigor', level: 0 },
-          { id: 3, name: 'Unix', level: 0 },
-          { id: 4, name: 'Network & system administration', level: 0 },
-          { id: 5, name: 'Object-oriented programming', level: 0 },
-          { id: 6, name: 'Web', level: 0 },
-          { id: 7, name: 'DB & Data', level: 0 },
-          { id: 8, name: 'Technology integration', level: 0 },
-          { id: 9, name: 'Security', level: 0 },
-          { id: 10, name: 'Graphics', level: 0 }
-        ]
-      }],
-      projects_users: [],
-      events: []
-    }
-
-    localStorage.setItem('guestMode', 'true')
-    setUserInfo(guestUser as unknown as UserInfo)
-    router.push('/accueil')
-  }
-
   return (
     <PublicRoute>
       <div className="min-h-[90vh] flex flex-col items-center justify-center gap-8">
@@ -78,14 +40,6 @@ export default function LoginPage() {
           <Image src="/logo.png" alt="42 logo" className="w-6 h-6 invert text-white" width={24} height={24} />
           {isLoading ? 'Connexion en cours...' : 'Se connecter avec 42'}
         </Button>
-        <Link
-          onClick={handleGuestLogin}
-          href="/accueil"
-          className="text-white cursor-pointer underline-animation"
-          style={{ width: 'fit-content' }}
-        >
-          Mode invité
-        </Link>
         </div>
         <p className="mt-4 text-gray-400 text-sm absolute bottom-0 left-0 right-0 text-center mb-4">by <a href="https://github.com/Maxime2i" target='_blank' className="hover:text-white transition-colors">mlangloi</a></p>
       </div>

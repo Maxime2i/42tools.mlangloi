@@ -73,14 +73,13 @@ export default function RNCPPage() {
   useEffect(() => {
     const initializeUserData = async () => {
       const accessToken = localStorage.getItem('accessToken')
-      const isGuestMode = localStorage.getItem('guestMode')
-
-      if (!accessToken && !isGuestMode) {
+      
+      if (!accessToken) {
         router.push('/')
         return
       }
 
-      if (!isGuestMode && !userInfo) {
+      if (!userInfo) {
         try {
           await fetchUserInfo()
         } catch (error) {
