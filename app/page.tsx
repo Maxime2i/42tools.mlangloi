@@ -2,17 +2,12 @@
 
 import { useState } from 'react'
 import PublicRoute from '@/components/PublicRoute'
-import { useUserStore } from '@/store/userStore'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import { UserInfo } from '@/store/userStore'
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { setUserInfo } = useUserStore()
 
   const handleLogin = () => {
     setIsLoading(true)
@@ -37,7 +32,7 @@ export default function LoginPage() {
           disabled={isLoading}
           className="bg-black border border-white hover:bg-white-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2 transition duration-500 ease-in-out hover:scale-110"
         >
-          <Image src="/logo.png" alt="42 logo" className="w-6 h-6 invert text-white" width={24} height={24} />
+          {/* <Image src="/logo.png" alt="42 logo" className="w-6 h-6 invert text-white" width={24} height={24} /> */}
           {isLoading ? 'Connexion en cours...' : 'Se connecter avec 42'}
         </Button>
         </div>
