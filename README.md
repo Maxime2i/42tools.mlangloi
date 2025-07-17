@@ -30,8 +30,10 @@ Le projet se connecte à l'API 42 pour récupérer les informations liées à l'
 - Simulateur de niveau : Interface pour ajouter des projets potentiels et simuler le niveau futur.
 - Page RNCP : Affichage des titres RNCP et suivi de la progression de l'utilisateur.
 
-## Avenir 
+## Images
 
-- Amélioration de l'interface utilisateur avec un design responsive.
-- Intégration de différentes statistiqsues au tableau de bord.
-- Ajout d'une page campus
+<img width="300" height="600" alt="42tools-mobile-portrait" src="https://github.com/user-attachments/assets/9e2e3369-4145-4883-82d7-5f57621772c7" />
+<img width="700" height="1200" alt="42tools-desktop-front" src="https://github.com/user-attachments/assets/91c09237-c71b-49ca-91c6-432ddc69e1b1" />
+
+
+
